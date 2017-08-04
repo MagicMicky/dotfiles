@@ -1,0 +1,15 @@
+[user]
+	name = MagicMicky
+	email = micky0304@gmail.com
+[push]
+        default = simple
+[alias]
+        st = status
+        undo = git reset --soft HEAD^
+        lol = log --graph --decorate --pretty=oneline --abbrev-commit
+        lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+[color]
+        branch = auto
+        diff = auto
+        interactive = auto
+        status = auto

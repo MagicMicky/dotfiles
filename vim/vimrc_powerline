@@ -1,0 +1,13 @@
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Custom powerline/airline stuff, with custom theme
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:airline_theme="lunac"
+let g:airline_powerline_fonts = 1
+let g:airline_symbols = get(g:,'airline_symbols',{})
+let g:airline_symbols.maxlinenr=''
+"Tabline stuff
+let g:airline#extensions#tabline#enabled = 1
+"hi TabLine      ctermfg=White  ctermbg=29     cterm=NONE
+"hi TabLineFill  ctermfg=White  ctermbg=23     cterm=NONE
+"hi TabLineSel   ctermfg=White  ctermbg=36  cterm=NONE
