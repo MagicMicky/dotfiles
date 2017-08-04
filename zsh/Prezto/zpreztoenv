@@ -1,0 +1,4 @@
+#!/bin/zsh
+
+#need for prezto plugin to be active
+alias x=unarchive

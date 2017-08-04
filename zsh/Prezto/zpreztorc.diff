@@ -1,0 +1,17 @@
+diff --git a/runcoms/zpreztorc b/runcoms/zpreztorc
+index 0b7a837..2072f88 100644
+--- a/runcoms/zpreztorc
++++ b/runcoms/zpreztorc
+@@ -31,7 +31,11 @@ zstyle ':prezto:load' pmodule \
+   'directory' \
+   'spectrum' \
+   'utility' \
++  'archive' \
+   'completion' \
++  'git' \
++  'syntax-highlighting' \
++  'history-substring-search' \
+   'prompt'
+ 
+ #
+ 

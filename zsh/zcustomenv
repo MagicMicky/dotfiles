@@ -1,0 +1,32 @@
+#!/bin/zsh
+
+# PATH
+export PATH="/usr/local/share/python:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export EDITOR='vim'
+# export PYTHONPATH=$PYTHONPATH
+# export MANPATH="/usr/local/man:$MANPATH"
+export LANG=fr_FR.UTF-8
+
+# FileSearch
+function f() { find . -iname "*$1*" ${@:2} }
+function r() { grep "$1" ${@:2} -R . }
+
+#mkdir and cd
+function mkcd() { mkdir -p "$@" && cd "$_"; }
+
+#Custom alias
+alias dcup='docker-compose up'
+alias dcb='docker-compose build'
+alias dcps='docker-compose ps'
+alias dcdwn='docker-compose down'
+alias dcrun='docker-compose run'
+alias dcpull='docker-compose pull'
+alias dokcer='docker'
+alias docekr='docker'
+
+alias sshks='ssh magicmicky@ks.mickael-goubin.fr'
+alias sshtarace='ssh magicmicky@server.tarace.lol -p 4242'
+
+#need for prezto plugin to be active
+alias x=unarchive
+
