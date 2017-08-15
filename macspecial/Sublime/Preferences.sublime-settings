@@ -1,0 +1,76 @@
+{
+	"always_show_minimap_viewport": true,
+	"auto_complete_selector": "source, text",
+	"bold_folder_labels": true,
+	"caret_style": "blink",
+	"color_scheme": "Packages/Boxy Theme/schemes/Boxy Ocean.tmTheme",
+	"create_window_at_startup": false,
+	"fade_fold_buttons": false,
+	"folder_exclude_patterns":
+	[
+		".svn",
+		".git",
+		".DS_Store",
+		"__pycache__",
+		"*.pyc",
+		"*.pyo",
+		"*.exe",
+		"*.dll",
+		"*.obj",
+		"*.o",
+		"*.a",
+		"*.lib",
+		"*.so",
+		"*.dylib",
+		"*.ncb",
+		"*.sdf",
+		"*.suo",
+		"*.pdb",
+		"*.idb",
+		"*.psd"
+	],
+	"font_face": "Menlo",
+	"font_size": 12,
+	"highlight_line": true,
+	"highlight_modified_tabs": true,
+	"ignored_packages":
+	[
+		"Markdown",
+		"Vintage"
+	],
+	"indent_guide_options":
+	[
+		"draw_normal",
+		"draw_active"
+	],
+	"line_padding_bottom": 1,
+	"line_padding_top": 1,
+	"open_files_in_new_window": false,
+	"overlay_scroll_bars": "enabled",
+	"rulers":
+	[
+		80
+	],
+	"show_encoding": true,
+	"show_line_endings": true,
+	"tab_size": 2,
+	"theme": "Boxy Ocean.sublime-theme",
+	"theme_accent_cyan": true,
+	"theme_bar": true,
+	"theme_bar_logo_atomized": true,
+	"theme_bar_shadow_hidden": true,
+	"theme_button_rounded": true,
+	"theme_dirty_colored_always": true,
+	"theme_icons_materialized": true,
+	"theme_scrollbar_rounded": true,
+	"theme_sidebar_highlight_selected_text_only": true,
+	"theme_sidebar_highlight_text_only": true,
+	"theme_sidebar_indent_top_level_disabled": true,
+	"theme_size_md": true,
+	"theme_tab_highlight_text_only": true,
+	"theme_tab_selected_transparent": true,
+	"theme_tab_selected_underlined": true,
+	"theme_unified": true,
+	"translate_tabs_to_spaces": true,
+	"word_wrap": true
+}
