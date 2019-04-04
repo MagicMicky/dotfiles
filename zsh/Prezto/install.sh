@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
+# OUTDATED
+
 #Move to right place
 cd "$(dirname "${BASH_SOURCE}")";
 
 git clone --recursive https://github.com/sorin-ionescu/prezto.git ~/.zprezto
 
-cp zshrc ~/.zshrc
-cp ../zcustomenv ~/.zcustomenv
-cp zpreztoenv ~/.zpreztoenv
-
+ln -s ../zpreztoenv ~/.zsh.d/zpreztoenv
+ln -s ../zcustomenv ~/.zsh.d/zcustomenv
 
 patch -p1 ~/.zprezto/runcoms/zpreztorc zpreztorc.diff
 
