@@ -5,7 +5,7 @@ export PATH="/usr/local/share/python:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbi
 export EDITOR='vim'
 # export PYTHONPATH=$PYTHONPATH
 # export MANPATH="/usr/local/man:$MANPATH"
-export LANG=fr_FR.UTF-8
+export LANG=en_US.UTF-8
 
 # FileSearch
 function f() { find . -iname "*$1*" ${@:2} }
