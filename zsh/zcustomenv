@@ -30,3 +30,4 @@ alias sshtarace='ssh magicmicky@server.tarace.lol -p 4242'
 #need for prezto plugin to be active
 alias x=unarchive
 
+alias wifit="networksetup -setairportpower Wi-Fi off && sleep 1 && networksetup -setairportpower Wi-Fi on"
