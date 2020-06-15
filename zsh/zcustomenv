@@ -31,3 +31,13 @@ alias sshtarace='ssh magicmicky@server.tarace.lol -p 4242'
 alias x=unarchive
 
 alias wifit="networksetup -setairportpower Wi-Fi off && sleep 1 && networksetup -setairportpower Wi-Fi on"
+
+function gdate() {
+    UTC_TIME=$(TZ="UTC" date)
+    BN_TIME=$(TZ=":Europe/Berlin" date)
+    NY_TIME=$(TZ=":America/New_York" date)
+    echo "UTC:\t$UTC_TIME"
+    echo "Berlin:\t$BN_TIME"
+    echo "NY:\t$NY_TIME"
+}
+function gi() { curl -sLw "\n" https://www.gitignore.io/api/\$@ ;}

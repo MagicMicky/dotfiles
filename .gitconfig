@@ -9,7 +9,7 @@
   lol = log --graph --decorate --pretty=oneline --abbrev-commit
   lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
   open = "!f(){ open $(git config remote.origin.url | sed \"s#git@\\(.*\\):\\(.*\\).git#https://\\1/\\2/tree/$(git symbolic-ref --quiet --short HEAD)/$(git rev-parse --show-prefix)$1#\"); }; f"
-
+    b = "!f(){ git checkout -b $1 origin/master;}; f"
 [color]
   branch = auto
   diff = auto

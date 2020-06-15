@@ -1,2 +1,3 @@
 .zsh.d/*
 !.zsh.d/.gitkeep
+.DS_Store
