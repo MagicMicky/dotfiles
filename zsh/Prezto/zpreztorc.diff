@@ -1,0 +1,12 @@
+--- zpreztorc	2022-04-11 15:45:28.000000000 +0200
++++ zpreztorc.new	2022-04-12 11:19:41.000000000 +0200
+@@ -39,6 +39,9 @@
+   'utility' \
+   'completion' \
+   'history-substring-search' \
++  'archive' \
++  'git' \
++  'syntax-highlighting' \
+   'prompt'
+ 
+ #
