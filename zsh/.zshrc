@@ -1,0 +1,91 @@
+#!/usr/bin/env zsh
+# Main zshrc - Modern shell configuration
+# This file sources all configuration in the correct order
+
+# Determine dotfiles location
+# Assumes dotfiles are at ~/Development/dotfiles
+DOTFILES_DIR="${HOME}/Development/dotfiles"
+
+# Source core configuration (in order)
+for config_file in ${DOTFILES_DIR}/zsh/core/*.zsh; do
+  [[ -f "$config_file" ]] && source "$config_file"
+done
+
+# Source profile-specific configuration based on detected machine type
+case "$MACHINE_TYPE" in
+  laptop-personal|laptop-pro)
+    # Load laptop profile
+    for config_file in ${DOTFILES_DIR}/zsh/profiles/laptop/*.zsh; do
+      [[ -f "$config_file" ]] && source "$config_file"
+    done
+    ;;
+  wsl)
+    # Load WSL profile
+    for config_file in ${DOTFILES_DIR}/zsh/profiles/wsl/*.zsh; do
+      [[ -f "$config_file" ]] && source "$config_file"
+    done
+    ;;
+  prod|dev-server|gaming-server|dedicated-server|homelab)
+    # Load server profile
+    for config_file in ${DOTFILES_DIR}/zsh/profiles/server/*.zsh; do
+      [[ -f "$config_file" ]] && source "$config_file"
+    done
+    ;;
+esac
+
+# Source pro profile if enabled (work-specific, non-sensitive)
+if [[ -f ~/.config/shell/laptop-pro ]]; then
+  for config_file in ${DOTFILES_DIR}/zsh/profiles/pro/*.zsh; do
+    [[ -f "$config_file" ]] && source "$config_file"
+  done
+fi
+
+# Source work-specific config if present (from mac-playbook-work)
+# This contains sensitive work configurations
+if [[ -f ~/.zsh.d/zn26env ]]; then
+  source ~/.zsh.d/zn26env
+fi
+
+# Initialize Starship prompt
+if command -v starship &> /dev/null; then
+  # Use starship config from dotfiles
+  if [[ -f "${DOTFILES_DIR}/starship/starship.toml" ]]; then
+    export STARSHIP_CONFIG="${DOTFILES_DIR}/starship/starship.toml"
+  fi
+  eval "$(starship init zsh)"
+fi
+
+# Initialize modern tools
+# fzf - Fuzzy finder
+if command -v fzf &> /dev/null; then
+  # Load fzf key bindings and completion
+  if [[ -f ~/.fzf.zsh ]]; then
+    source ~/.fzf.zsh
+  elif [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
+    source /usr/share/doc/fzf/examples/key-bindings.zsh
+  fi
+
+  if [[ -f /usr/share/doc/fzf/examples/completion.zsh ]]; then
+    source /usr/share/doc/fzf/examples/completion.zsh
+  fi
+
+  # fzf configuration
+  export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+
+  # Use fd if available for fzf
+  if command -v fd &> /dev/null; then
+    export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+  fi
+fi
+
+# zoxide - Smart directory jumper
+if command -v zoxide &> /dev/null; then
+  eval "$(zoxide init zsh)"
+fi
+
+# Print welcome message (optional, can be removed if annoying)
+if [[ -o interactive ]]; then
+  echo "🚀 Modern shell loaded | Machine: $MACHINE_TYPE"
+fi
