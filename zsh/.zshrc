@@ -2,9 +2,30 @@
 # Main zshrc - Modern shell configuration
 # This file sources all configuration in the correct order
 
-# Determine dotfiles location
-# Assumes dotfiles are at ~/Development/dotfiles
-DOTFILES_DIR="${HOME}/Development/dotfiles"
+# Determine dotfiles location dynamically
+# Resolve .zshrc symlink to find actual dotfiles directory
+if [[ -L "${HOME}/.zshrc" ]]; then
+  # .zshrc is symlinked - resolve to find dotfiles repo
+  # readlink -f follows all symlinks to get the real path
+  ZSHRC_REAL_PATH=$(readlink -f "${HOME}/.zshrc")
+  # Go up two directories: /path/to/dotfiles/zsh/.zshrc -> /path/to/dotfiles
+  DOTFILES_DIR=$(dirname $(dirname "$ZSHRC_REAL_PATH"))
+else
+  # Fallback to default location if .zshrc is not a symlink
+  DOTFILES_DIR="${HOME}/Development/dotfiles"
+fi
+
+# Verify DOTFILES_DIR exists before proceeding
+if [[ ! -d "$DOTFILES_DIR" ]]; then
+  echo "ERROR: Dotfiles directory not found: $DOTFILES_DIR" >&2
+  echo "Cannot load shell configuration" >&2
+  if [[ -L "${HOME}/.zshrc" ]]; then
+    echo "Note: .zshrc is symlinked from: $(readlink -f "${HOME}/.zshrc")" >&2
+  else
+    echo "Note: .zshrc is not symlinked. Expected symlink from dotfiles repo" >&2
+  fi
+  return 1
+fi
 
 # Source core configuration (in order)
 for config_file in ${DOTFILES_DIR}/zsh/core/*.zsh; do
