@@ -42,8 +42,8 @@ fi
 
 # Source work-specific config if present (from mac-playbook-work)
 # This contains sensitive work configurations
-if [[ -f ~/.zsh.d/zn26env ]]; then
-  source ~/.zsh.d/zn26env
+if [[ -f ~/.zsh.d/zworkenv ]]; then
+  source ~/.zsh.d/zworkenv
 fi
 
 # Initialize Starship prompt
