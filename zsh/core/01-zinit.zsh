@@ -14,10 +14,20 @@ fi
 # Source zinit
 source "${ZINIT_HOME}/zinit.zsh"
 
-# Load completions
+# Load completions - but cache the dump file
+# Only regenerate once per day or when dump is missing/stale
 autoload -Uz compinit
-compinit
 
-# Enable cache for faster startup
+# Check if dump file needs regeneration (older than 24 hours)
+setopt EXTENDEDGLOB
+if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+  # Dump is old or missing, regenerate with security check
+  compinit
+else
+  # Use cached dump, skip security check for speed
+  compinit -C
+fi
+
+# Enable completion cache for faster lookups
 zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path ~/.zsh/cache
+zstyle ':completion:*' cache-path ${ZDOTDIR:-$HOME}/.zsh/cache
