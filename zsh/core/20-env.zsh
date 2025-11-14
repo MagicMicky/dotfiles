@@ -35,13 +35,20 @@ setopt PUSHD_SILENT              # Do not print the directory stack after pushd 
 setopt CORRECT                   # Spelling correction for commands
 setopt CORRECT_ALL               # Spelling correction for arguments
 
-# Completion
+# Completion options
 unsetopt ALWAYS_TO_END           # Disable cursor movement (fixes prompt rendering with menu)
 setopt AUTO_MENU                 # Show completion menu on successive tab press
 setopt AUTO_LIST                 # Automatically list choices on ambiguous completion
 setopt AUTO_PARAM_SLASH          # If completed parameter is a directory, add a trailing slash
 unsetopt COMPLETE_IN_WORD        # Prevent mid-word completion (fixes menu duplication bug)
 unsetopt MENU_COMPLETE           # Do not autoselect the first completion entry
+
+# Enhanced completion styles (vanilla + visual improvements)
+zstyle ':completion:*' menu select                          # Enable arrow key navigation in menu
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' # Case-insensitive matching
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}       # Colorize completions using LS_COLORS
+zstyle ':completion:*' group-name ''                        # Group completions by type
+zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f' # Yellow headers for groups
 
 # Disable beep
 unsetopt BEEP

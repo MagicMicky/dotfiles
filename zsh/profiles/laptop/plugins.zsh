@@ -15,14 +15,16 @@ zinit snippet OMZ::plugins/docker/docker.plugin.zsh
 zinit snippet OMZ::plugins/docker-compose/docker-compose.plugin.zsh
 zinit snippet OMZ::plugins/extract/extract.plugin.zsh
 
-# GitHub plugins
+# GitHub plugins - DISABLED (stripped down to vanilla completion)
+# See PLUGINS.md for descriptions and when to re-enable
+
 # zsh-autosuggestions - Ghost text from history
-zinit light zsh-users/zsh-autosuggestions
+# zinit light zsh-users/zsh-autosuggestions
 
 # zsh-syntax-highlighting - Command validation as you type
-zinit ice wait lucid
-zinit light zsh-users/zsh-syntax-highlighting
+# zinit ice wait lucid
+# zinit light zsh-users/zsh-syntax-highlighting
 
 # zsh-history-substring-search - Better history search
-zinit ice wait lucid
-zinit light zsh-users/zsh-history-substring-search
+# zinit ice wait lucid
+# zinit light zsh-users/zsh-history-substring-search

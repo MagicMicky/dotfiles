@@ -1,21 +1,22 @@
 #!/usr/bin/env zsh
 # Laptop-specific configuration
 
+# Plugin configurations - DISABLED (plugins removed)
 # zsh-autosuggestions configuration
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
-ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+# ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
+# ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 
 # zsh-syntax-highlighting configuration
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
+# ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
 
-# History substring search keybindings
+# History substring search keybindings - DISABLED (plugin removed)
 # Bind up and down arrow keys
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
+# bindkey '^[[A' history-substring-search-up
+# bindkey '^[[B' history-substring-search-down
 
 # Also bind k and j in vi mode
-bindkey -M vicmd 'k' history-substring-search-up
-bindkey -M vicmd 'j' history-substring-search-down
+# bindkey -M vicmd 'k' history-substring-search-up
+# bindkey -M vicmd 'j' history-substring-search-down
 
 # Modern tools configuration
 # bat
