@@ -6,7 +6,8 @@
 zinit snippet OMZ::lib/git.zsh
 zinit snippet OMZ::lib/clipboard.zsh
 zinit snippet OMZ::lib/history.zsh
-zinit snippet OMZ::lib/completion.zsh
+# NOTE: OMZ::lib/completion.zsh is NOT loaded here
+# We'll initialize completion AFTER Starship to avoid display issues
 
 # OMZ plugins - Essential utilities
 zinit snippet OMZ::plugins/git/git.plugin.zsh

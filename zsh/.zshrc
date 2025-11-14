@@ -96,6 +96,16 @@ if command -v starship &> /dev/null; then
   eval "$(starship init zsh)"
 fi
 
+# Initialize completion system AFTER Starship
+# This ensures prompt length calculations are correct
+autoload -Uz compinit
+# Only regenerate compdump once a day for performance
+if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
+
 # Initialize modern tools
 # fzf - Fuzzy finder
 if command -v fzf &> /dev/null; then
