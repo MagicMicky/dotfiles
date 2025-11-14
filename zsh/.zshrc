@@ -94,6 +94,13 @@ if command -v starship &> /dev/null; then
     export STARSHIP_CONFIG="${DOTFILES_DIR}/starship/starship.toml"
   fi
   eval "$(starship init zsh)"
+
+  # Workaround for Starship + completion menu rendering bug
+  # Force zsh to recalculate prompt length after Starship initialization
+  # This fixes character duplication when completion menu appears
+  autoload -Uz add-zsh-hook
+  _fix_prompt_length() { true; }
+  add-zsh-hook precmd _fix_prompt_length
 fi
 
 # Initialize completion system AFTER Starship
