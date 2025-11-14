@@ -92,6 +92,11 @@ if command -v eza &> /dev/null; then
   alias ll='eza -l'
   alias la='eza -la'
   alias tree='eza --tree'
+else
+  # Fallback: enable colors for standard ls
+  alias ls='ls --color=auto'
+  alias ll='ls -lh --color=auto'
+  alias la='ls -lAh --color=auto'
 fi
 
 if command -v bat &> /dev/null; then
@@ -105,4 +110,9 @@ fi
 
 if command -v rg &> /dev/null; then
   alias grep='rg'
+else
+  # Fallback: enable colors for standard grep
+  alias grep='grep --color=auto'
+  alias egrep='egrep --color=auto'
+  alias fgrep='fgrep --color=auto'
 fi
