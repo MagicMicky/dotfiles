@@ -94,6 +94,11 @@ else
   compinit -C
 fi
 
+# CRITICAL FIX: Disable list packing and force single-column if needed
+# List packing can cause cursor position miscalculation
+zstyle ':completion:*:default' list-packed false
+zstyle ':completion:*:default' list-rows-first false
+
 # Initialize Starship prompt AFTER completion system
 if command -v starship &> /dev/null; then
   # Use generated starship config (Ansible creates ~/.config/starship.toml with machine-specific colors)
@@ -119,18 +124,7 @@ fi
 # Initialize modern tools
 # fzf - Fuzzy finder
 if command -v fzf &> /dev/null; then
-  # Load fzf key bindings and completion
-  if [[ -f ~/.fzf.zsh ]]; then
-    source ~/.fzf.zsh
-  elif [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
-    source /usr/share/doc/fzf/examples/key-bindings.zsh
-  fi
-
-  if [[ -f /usr/share/doc/fzf/examples/completion.zsh ]]; then
-    source /usr/share/doc/fzf/examples/completion.zsh
-  fi
-
-  # fzf configuration
+  # fzf configuration (set before loading scripts)
   export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 
   # Use fd if available for fzf
@@ -139,6 +133,20 @@ if command -v fzf &> /dev/null; then
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
   fi
+
+  # Load fzf key bindings ONLY (not completion)
+  # fzf completion causes character duplication bug with tab completion
+  if [[ -f ~/.fzf.zsh ]]; then
+    source ~/.fzf.zsh
+  elif [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
+    source /usr/share/doc/fzf/examples/key-bindings.zsh
+  fi
+
+  # DISABLED: fzf tab completion interferes with zsh completion rendering
+  # You still get fzf functionality via Ctrl-T (files), Ctrl-R (history), Alt-C (dirs)
+  # if [[ -f /usr/share/doc/fzf/examples/completion.zsh ]]; then
+  #   source /usr/share/doc/fzf/examples/completion.zsh
+  # fi
 fi
 
 # zoxide - Smart directory jumper

@@ -9,6 +9,11 @@ export VISUAL='vim'
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
+# Terminal settings - Force fast terminal mode
+# In Docker/WSL, zsh may misdetect terminal speed causing rendering issues
+# This forces zsh to assume a fast modern terminal
+export BAUD=38400
+
 # History configuration
 export HISTSIZE=50000
 export SAVEHIST=50000
@@ -34,6 +39,8 @@ setopt PUSHD_SILENT              # Do not print the directory stack after pushd 
 # Prompt options
 setopt PROMPT_SP                 # Preserve partial lines (may help with Starship rendering)
 setopt PROMPT_SUBST              # Enable parameter expansion in prompts
+setopt PROMPT_CR                 # Print carriage return before prompt (critical for width calculation)
+setopt PROMPT_PERCENT            # Enable percent escapes in prompt
 
 # Correction
 setopt CORRECT                   # Spelling correction for commands
@@ -62,6 +69,15 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}       # Colorize completio
 # This prevents zsh from trying to rewrite the prompt when showing completions
 zstyle ':completion:*' list-prompt ''
 zstyle ':completion:*' select-prompt ''
+
+# CRITICAL: Tell zsh to ignore prompt escapes when calculating width
+# This is THE fix for character duplication
+# When zsh lists completions, it tries to move the cursor - but miscalculates position
+# These settings tell the completion system "don't try to be clever with cursor positioning"
+zstyle ':completion:*' format ''
+zstyle ':completion:*' auto-description ''
+zstyle ':completion:*' completer _complete
+zstyle ':completion:*' insert-tab false
 
 # Disable beep
 unsetopt BEEP
