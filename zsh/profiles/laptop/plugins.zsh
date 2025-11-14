@@ -7,6 +7,5 @@
 # Workstation-specific plugins
 # ============================================================================
 
-# fzf-tab: Fuzzy finder interface for tab completions
-# Replaces default completion menu with fzf for better searchability
-zinit light Aloxaf/fzf-tab
+# No additional plugins for workstation profiles
+# Using vanilla tab completion (arrow key navigation)
