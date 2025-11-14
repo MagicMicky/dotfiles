@@ -1,6 +1,11 @@
 #!/usr/bin/env zsh
 # WSL-specific configuration
 
+# Load laptop config first (includes autosuggestions, syntax-highlighting, etc.)
+source ${DOTFILES_DIR}/zsh/profiles/laptop/config.zsh
+
+# WSL-specific overrides below
+
 # Windows interop
 export BROWSER="wslview"
 

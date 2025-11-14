@@ -36,7 +36,7 @@ setopt CORRECT                   # Spelling correction for commands
 setopt CORRECT_ALL               # Spelling correction for arguments
 
 # Completion
-setopt ALWAYS_TO_END             # Move cursor to end if word had one match
+unsetopt ALWAYS_TO_END           # Disable cursor movement (fixes prompt rendering with menu)
 setopt AUTO_MENU                 # Show completion menu on successive tab press
 setopt AUTO_LIST                 # Automatically list choices on ambiguous completion
 setopt AUTO_PARAM_SLASH          # If completed parameter is a directory, add a trailing slash
