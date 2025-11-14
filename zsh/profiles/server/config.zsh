@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
 # Server-specific configuration
 # Optimized for minimal resource usage
+# NOTE: Theme configured in core/25-tools.zsh
 
-# Load Catppuccin theme (LS_COLORS, BAT_THEME, FZF colors, etc.)
-if [[ -f "$HOME/.config/shell/theme.zsh" ]]; then
-  source "$HOME/.config/shell/theme.zsh"
-fi
+# ============================================================================
+# Server-specific optimizations
+# ============================================================================
 
 # Reduced history size for servers
 export HISTSIZE=10000
