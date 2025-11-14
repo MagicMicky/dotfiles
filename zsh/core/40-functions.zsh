@@ -91,8 +91,9 @@ zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
 
 # Bind to arrow keys using terminfo (portable across terminals)
-bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search    # Up arrow
-bindkey "${terminfo[kcud1]}" down-line-or-beginning-search  # Down arrow
+# Only bind if terminfo keys are available
+[[ -n "${terminfo[kcuu1]}" ]] && bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search    # Up arrow
+[[ -n "${terminfo[kcud1]}" ]] && bindkey "${terminfo[kcud1]}" down-line-or-beginning-search  # Down arrow
 
 # Fallback bindings for terminals without proper terminfo
 bindkey "^[[A" up-line-or-beginning-search  # Up arrow fallback
