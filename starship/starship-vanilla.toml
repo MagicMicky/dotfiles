@@ -1,7 +1,13 @@
-# Vanilla Starship Configuration (Stage 0)
-# Absolute minimal prompt for testing
+# Vanilla Starship Configuration (Stage 2)
+# Minimal prompt with directory module
 
-format = "$character"
+format = "$directory$character"
+
+[directory]
+style = "cyan bold"
+truncation_length = 3
+truncate_to_repo = true
+format = "[$path]($style) "
 
 [character]
 success_symbol = "[❯](green)"
