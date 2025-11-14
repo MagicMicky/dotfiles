@@ -37,10 +37,15 @@ unsetopt HIST_BEEP
 unsetopt LIST_BEEP
 
 # Stage 1: Basic completion options (testing incrementally)
-# Adding only essential completion setopts, no zstyles yet
+# Adding only essential completion setopts and case-insensitive matching
 setopt AUTO_MENU                 # Show completion menu on successive tab press
 setopt AUTO_LIST                 # List choices on ambiguous completion
 
-# NOTE: No other completion options yet - testing these first
+# Stage 1 Increment 2: Case-insensitive completion
+# Empty string = exact match, second pattern = case-insensitive fallback
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
+
+# NOTE: No colored completions yet - testing case-insensitive first
+# NOTE: No other zstyles yet - testing matcher-list only
 # NOTE: No prompt options - using zsh defaults
 # See: _doc/vanilla-roadmap.md Stage 1
