@@ -50,5 +50,5 @@ compinit
 # Print welcome message (helps identify which config is loaded)
 if [[ -o interactive ]]; then
   MACHINE_TYPE=$(cat ~/.zsh.d/.machine-type 2>/dev/null || echo "unknown")
-  echo "🔧 Vanilla baseline loaded | Profile: $MACHINE_TYPE | Stage: 0"
+  echo "🔧 Vanilla baseline loaded | Profile: $MACHINE_TYPE | Stage: 1 (basic completion)"
 fi
