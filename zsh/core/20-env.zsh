@@ -30,6 +30,7 @@ setopt HIST_IGNORE_DUPS          # Do not record an event that was just recorded
 setopt HIST_IGNORE_SPACE         # Do not record an event starting with a space
 setopt HIST_SAVE_NO_DUPS         # Do not write a duplicate event to the history file
 setopt HIST_VERIFY               # Do not execute immediately upon history expansion
+setopt INC_APPEND_HISTORY        # Write to history file immediately, not on shell exit
 setopt SHARE_HISTORY             # Share history between all sessions
 
 # Other zsh options
