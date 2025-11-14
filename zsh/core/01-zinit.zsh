@@ -4,6 +4,11 @@
 # Set zinit home directory
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
+# Configure git to use anonymous HTTPS for GitHub (no authentication required)
+# This prevents zinit from asking for credentials when cloning plugins
+git config --global url."https://github.com/".insteadOf "gh:"
+git config --global url."https://github.com/".insteadOf "github:"
+
 # Auto-install zinit if not present
 if [[ ! -d "$ZINIT_HOME" ]]; then
    echo "Installing zinit..."
