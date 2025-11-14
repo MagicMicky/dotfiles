@@ -84,7 +84,17 @@ if [[ -f ~/.zsh.d/zworkenv ]]; then
   source ~/.zsh.d/zworkenv
 fi
 
-# Initialize Starship prompt
+# CRITICAL FIX: Initialize completion BEFORE Starship
+# This is counter-intuitive but prevents Starship from interfering with completion width calculation
+autoload -Uz compinit
+setopt EXTENDEDGLOB
+if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
+
+# Initialize Starship prompt AFTER completion system
 if command -v starship &> /dev/null; then
   # Use generated starship config (Ansible creates ~/.config/starship.toml with machine-specific colors)
   # If not found, fall back to dotfiles version
@@ -95,26 +105,16 @@ if command -v starship &> /dev/null; then
   fi
   eval "$(starship init zsh)"
 
+  # CRITICAL: Force prompt reset on every command
+  # This recalculates prompt width to prevent character duplication
+  autoload -Uz add-zsh-hook
+  _starship_reset_prompt() {
+    # Reset zsh line editor state
+    zle && zle reset-prompt
+    return 0
+  }
+  add-zsh-hook precmd _starship_reset_prompt
 fi
-
-# CRITICAL FIX: Completion rendering with Starship
-# Initialize completion system AFTER Starship and apply fixes
-# This ensures prompt length calculations are correct (prevents character doubling in tab completion)
-autoload -Uz compinit
-# Only regenerate compdump once a day for performance
-setopt EXTENDEDGLOB
-if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
-  compinit
-else
-  compinit -C
-fi
-
-# CRITICAL: Reset prompt after compinit to fix width calculation
-# This is the KEY fix for the duplication bug with Starship
-# Forces zsh to recalculate prompt dimensions after completion system loads
-zle -N zle-line-init
-autoload -Uz add-zsh-hook
-add-zsh-hook precmd () { PROMPT_EOL_MARK='' }
 
 # Initialize modern tools
 # fzf - Fuzzy finder

@@ -46,19 +46,22 @@ setopt AUTO_LIST                 # Automatically list choices on ambiguous compl
 setopt AUTO_PARAM_SLASH          # If completed parameter is a directory, add a trailing slash
 unsetopt COMPLETE_IN_WORD        # Prevent mid-word completion (fixes menu duplication bug)
 unsetopt MENU_COMPLETE           # Do not autoselect the first completion entry
+unsetopt LIST_PACKED             # Don't pack completion list (may cause rendering issues)
+setopt LIST_ROWS_FIRST           # Sort completions horizontally (may help with rendering)
 
-# Enhanced completion styles (vanilla + visual improvements)
-zstyle ':completion:*' menu select                          # Enable arrow key navigation in menu
+# Enhanced completion styles (minimal to avoid Starship conflicts)
+# TEMPORARILY DISABLED: menu select may cause rendering issues with Starship
+# zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' # Case-insensitive matching
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}       # Colorize completions using LS_COLORS
-zstyle ':completion:*' group-name ''                        # Group completions by type
 # TEMPORARILY DISABLED: May interfere with prompt width calculation
-# zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f' # Yellow headers for groups
+# zstyle ':completion:*' group-name ''
+# zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
 
-# Fix for completion list prompt rendering (Starship compatibility)
-zstyle ':completion:*' list-prompt ''                       # Disable list continuation prompt
-zstyle ':completion:*' select-prompt ''                     # Disable selection prompt
-zstyle ':completion:*:default' list-prompt ''               # Explicitly disable for default context
+# CRITICAL FIX: Completely disable all prompts (Starship compatibility)
+# This prevents zsh from trying to rewrite the prompt when showing completions
+zstyle ':completion:*' list-prompt ''
+zstyle ':completion:*' select-prompt ''
 
 # Disable beep
 unsetopt BEEP
