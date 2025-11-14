@@ -1,9 +1,15 @@
 #!/usr/bin/env zsh
-# WSL profile - Similar to laptop profile
-# Loads laptop plugins plus WSL-specific additions
+# WSL profile - Stage 3: Visual Enhancements
+# Adding plugins incrementally to test for bugs
+# See: _doc/vanilla-roadmap.md for progression plan
 
-# Load all laptop plugins first
-source ${DOTFILES_DIR}/zsh/profiles/laptop/plugins.zsh
+# Stage 3 Increment 1: zsh-autosuggestions
+# Ghost text from history - least likely to interfere with completion
+zinit light zsh-users/zsh-autosuggestions
 
-# WSL-specific plugins can be added here if needed
-# Currently using the same plugins as laptop
+# Stage 3 Increment 2: zsh-syntax-highlighting
+# Command validation - must load LAST (after all other plugins)
+zinit light zsh-users/zsh-syntax-highlighting
+
+# Stage 3 TODO: Add more plugins if needed:
+# - zsh-history-substring-search (better Ctrl-R) - optional

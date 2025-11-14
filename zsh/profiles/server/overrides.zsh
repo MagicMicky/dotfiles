@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
-# Server-specific aliases
+# Server profile - Overrides and additions
+# Only SERVER-SPECIFIC aliases and settings go here
+# Common aliases are in core/30-aliases.zsh
 
 # System monitoring
 alias ports='netstat -tulanp'
@@ -23,7 +25,9 @@ alias restart='sudo systemctl restart'
 alias enable='sudo systemctl enable'
 alias disable='sudo systemctl disable'
 
-# Quick navigation
-alias logs='cd /var/log'
+# Quick navigation (server-specific paths)
+alias logdir='cd /var/log'
 alias apps='cd /opt'
 alias web='cd /var/www'
+
+# NOTE: Git, Docker already in core/30-aliases.zsh
