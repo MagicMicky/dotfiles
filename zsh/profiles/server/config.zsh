@@ -11,10 +11,6 @@ fi
 export HISTSIZE=10000
 export SAVEHIST=10000
 
-# Simpler completion (faster)
-setopt NO_MENU_COMPLETE
-setopt NO_AUTO_MENU
-
 # Disable correction on servers (can be annoying)
 unsetopt CORRECT
 unsetopt CORRECT_ALL
