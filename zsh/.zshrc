@@ -38,8 +38,12 @@ fi
 autoload -Uz compinit
 compinit
 
-# NO Starship initialization - using system default prompt (%)
-# See: _doc/vanilla-roadmap.md Stage 2 for prompt addition
+# Stage 2: Starship prompt initialization (minimal)
+# Using starship-vanilla.toml (character only, no modules)
+if command -v starship &> /dev/null; then
+  export STARSHIP_CONFIG=~/.config/starship.toml
+  eval "$(starship init zsh)"
+fi
 
 # NO fzf integration - disabled for vanilla testing
 # See: _doc/vanilla-roadmap.md Stage 4 for fzf re-enablement
@@ -50,5 +54,5 @@ compinit
 # Print welcome message (helps identify which config is loaded)
 if [[ -o interactive ]]; then
   MACHINE_TYPE=$(cat ~/.zsh.d/.machine-type 2>/dev/null || echo "unknown")
-  echo "🔧 Vanilla baseline loaded | Profile: $MACHINE_TYPE | Stage: 1 (basic completion)"
+  echo "🔧 Vanilla baseline loaded | Profile: $MACHINE_TYPE | Stage: 2 (minimal prompt)"
 fi
