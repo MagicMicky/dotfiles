@@ -2,6 +2,8 @@
 # Laptop-specific configuration
 
 # zsh-autosuggestions configuration
+# Prevent autosuggestions from wrapping tab completion widgets (fixes menu duplication)
+ZSH_AUTOSUGGEST_CLEAR_WIDGETS=(expand-or-complete)
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 

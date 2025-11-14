@@ -40,7 +40,7 @@ setopt ALWAYS_TO_END             # Move cursor to end if word had one match
 setopt AUTO_MENU                 # Show completion menu on successive tab press
 setopt AUTO_LIST                 # Automatically list choices on ambiguous completion
 setopt AUTO_PARAM_SLASH          # If completed parameter is a directory, add a trailing slash
-setopt COMPLETE_IN_WORD          # Complete from both ends of a word
+unsetopt COMPLETE_IN_WORD        # Prevent mid-word completion (fixes menu duplication bug)
 unsetopt MENU_COMPLETE           # Do not autoselect the first completion entry
 
 # Disable beep
