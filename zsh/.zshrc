@@ -43,6 +43,11 @@ compinit
 if command -v starship &> /dev/null; then
   export STARSHIP_CONFIG=~/.config/starship.toml
   eval "$(starship init zsh)"
+
+  # Stage 2 Increment 2: Workaround for tab completion duplication bug
+  # Starship sets PROMPT_SUBST which causes `gi<TAB>` to show `gi  gi`
+  # Disabling PROMPT_SUBST fixes the bug
+  unsetopt PROMPT_SUBST
 fi
 
 # NO fzf integration - disabled for vanilla testing

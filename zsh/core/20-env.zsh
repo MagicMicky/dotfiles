@@ -49,6 +49,10 @@ zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 # Use LS_COLORS for file/directory coloring in completions
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
+# Stage 2: Testing prompt-related setopts
+# Starship sets PROMPT_SUBST which may cause completion issues
+# Testing workaround: disable PROMPT_SUBST after Starship init
+# NOTE: This must be set BEFORE Starship init in .zshrc
+
 # NOTE: Stage 1 complete - basic completion working with colors
-# NOTE: No prompt options yet - using zsh defaults (% prompt)
-# See: _doc/vanilla-roadmap.md Stage 1
+# See: _doc/vanilla-roadmap.md Stage 2
