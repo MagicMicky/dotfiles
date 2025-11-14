@@ -40,15 +40,11 @@ compinit
 
 # Stage 2: Starship prompt initialization (minimal)
 # Using starship-vanilla.toml (character only, no modules)
+# FIX: Tab completion duplication bug requires UTF-8 locale (see core/20-env.zsh)
+# GitHub issue: https://github.com/starship/starship/issues/2176
 if command -v starship &> /dev/null; then
   export STARSHIP_CONFIG=~/.config/starship.toml
   eval "$(starship init zsh)"
-
-  # Stage 2 Increment 3: Testing workarounds for completion bug
-  # PROMPT_SUBST is REQUIRED for Starship (can't disable it)
-  # Testing other prompt-related setopts that might help
-  unsetopt PROMPT_CR      # Don't print CR before prompt
-  unsetopt PROMPT_SP      # Don't print SP before prompt
 fi
 
 # NO fzf integration - disabled for vanilla testing
