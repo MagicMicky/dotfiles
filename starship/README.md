@@ -1,139 +1,64 @@
-# Starship Prompt Configuration
+# Starship Configuration
 
-This unified Starship configuration adapts to different machine types through environment variables set by the shell detection script.
+## Location
 
-## Character System
+Starship configuration is **NOT** stored in this dotfiles repository.
 
-Visual machine differentiation using three characters:
+Instead, it is managed by **Ansible templates** in the `ansible-playbooks` repository:
 
-- **λ** (lambda) - Laptops/Workstations (Personal, Pro, WSL)
-- **!** (exclamation) - Production Servers
-- **·** (middle dot) - Other Servers (Dev, Gaming, Dedicated, Homelab)
-
-## Environment Colors
-
-| Environment | Character | Color | Hex Code |
-|-------------|-----------|-------|----------|
-| Personal | λ | Blue | #82AAFF |
-| Pro | λ | Cyan/Teal | #7FDBCA |
-| WSL | λ | Blue | #82AAFF |
-| Production | ! | Red | #FF5370 |
-| Dev Server | · | Orange | #FFB86C |
-| Gaming | · | Purple | #C792EA |
-| Dedicated | · | Coral | #F78C6C |
-| Homelab | · | Cyan | #89DDFF |
-
-## Prompt Examples
-
-### Personal Laptop
 ```
-[λ] ~/Development/dotfiles on  main [!+]
-❯
+ansible-playbooks/roles/common-shell/templates/starship.toml.j2
 ```
 
-### Production Server (Red Alert)
-```
-[!] prod-web-01 ~/app on  main
-❯
-```
+## Why Ansible Templates?
 
-### Dev Server (Orange)
-```
-[·] dev-01 ~/project on  develop [!+]
-❯
-```
+- **Build-time configuration**: Machine type, colors, and features are determined during deployment
+- **Single source of truth**: No need to maintain multiple configs (vanilla, minimal, full, etc.)
+- **Environment-specific**: Different machines get different prompts automatically
+- **DRY principle**: Configuration logic lives in Ansible, not duplicated across config files
 
-### Root User on Production (Maximum Alert)
-```
-root@prod-web-01 [!] /opt
-#
-```
+## Deployment
+
+When you run an Ansible playbook (e.g., `playbooks/mac/personal.yml` or `playbooks/wsl/setup.yml`), it:
+
+1. Detects machine type (laptop, server, pro, wsl)
+2. Generates `~/.config/starship.toml` from template
+3. Sets appropriate colors and symbols based on machine profile
+
+## Current Configuration (Stage 2 - Vanilla Testing)
+
+During vanilla baseline testing, the Starship config is minimal:
+- Format: `$directory$character`
+- Directory: Full path in cyan
+- Character: Green `❯` (success) / Red `❯` (error)
+- No git modules, no other features (testing incrementally)
+
+**Testing status**: See `_doc/vanilla-roadmap.md` for progress
+
+## Future: Machine-Specific Theming
+
+After vanilla testing completes (Stages 3-5), we'll implement:
+- 3-color scheme (blue/yellow/red for safe/caution/danger)
+- Symbol differentiation (λ, !, ·)
+- Git integration for development machines
+- Build-time profile detection in Ansible template
 
 ## Manual Override
 
-Override machine type detection:
+If you need to test different machine types:
 
 ```bash
+# Override machine type
 mkdir -p ~/.config/shell
 echo "prod" > ~/.config/shell/machine-type
+
+# Then redeploy with Ansible to regenerate config
 ```
 
-Options: `prod`, `dev-server`, `gaming-server`, `dedicated-server`, `homelab`, `wsl`, `laptop-personal`, `laptop-pro`
-
-Enable pro profile (work laptop):
-
-```bash
-touch ~/.config/shell/laptop-pro
-```
-
-## Configuration
-
-The configuration is driven by environment variables set in `zsh/core/00-detect.zsh`:
-
-- `STARSHIP_ENV_CHAR` - Character to display (λ, !, ·)
-- `STARSHIP_ENV_COLOR` - Color hex code
-- `STARSHIP_SHOW_HOSTNAME` - Whether to show hostname
-- `STARSHIP_SHOW_LANGS` - Whether to show language versions
-- `STARSHIP_IS_ROOT` - Whether running as root user
-
-## Customization
-
-Edit `starship.toml` to customize:
-
-- Shorter directory path: Change `truncation_length`
-- Disable language indicators: Set module to `disabled = true`
-- Change git status symbols: Modify `[git_status]` section
-- Add custom modules: See [Starship docs](https://starship.rs/)
-
-## Installation
-
-Starship is installed automatically via Ansible playbooks or manually:
-
-```bash
-# macOS
-brew install starship
-
-# Linux
-curl -sS https://starship.rs/install.sh | sh
-```
-
-## Testing
-
-Test different machine types:
-
-```bash
-# Test as personal laptop
-export MACHINE_TYPE="laptop-personal"
-source ~/.zshrc
-
-# Test as production server
-export MACHINE_TYPE="prod"
-source ~/.zshrc
-
-# Test as root
-sudo -s
-source ~/.zshrc
-```
-
-## Features
-
-- **Fast**: Written in Rust, minimal startup overhead
-- **Customizable**: Extensive configuration options
-- **Cross-shell**: Works with zsh, bash, fish, PowerShell
-- **Git-aware**: Shows branch, status, and operations
-- **Language-aware**: Detects Python, Node, Go, Rust, etc.
-- **Context-aware**: Shows Docker, Kubernetes, AWS contexts
-
-## Accessibility
-
-- Character indicators provide primary differentiation
-- Color is secondary enhancement (not required to distinguish types)
-- Works with all modern terminals
-- No reliance on emoji rendering
-- High contrast color palette
+Options: `wsl`, `laptop`, `server`, `pro`
 
 ## Resources
 
 - [Starship Documentation](https://starship.rs/)
 - [Configuration Reference](https://starship.rs/config/)
-- [Presets](https://starship.rs/presets/)
+- Ansible template: `ansible-playbooks/roles/common-shell/templates/starship.toml.j2`
