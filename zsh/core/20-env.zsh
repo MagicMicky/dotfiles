@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# Environment variables - Vanilla baseline (Stage 0)
+# Environment variables - Stage 1: Basic completion options
 
 # Editor
 export EDITOR='vim'
@@ -36,6 +36,11 @@ unsetopt BEEP
 unsetopt HIST_BEEP
 unsetopt LIST_BEEP
 
-# NOTE: No completion configuration here - using zsh defaults
+# Stage 1: Basic completion options (testing incrementally)
+# Adding only essential completion setopts, no zstyles yet
+setopt AUTO_MENU                 # Show completion menu on successive tab press
+setopt AUTO_LIST                 # List choices on ambiguous completion
+
+# NOTE: No other completion options yet - testing these first
 # NOTE: No prompt options - using zsh defaults
-# See: _doc/vanilla-roadmap.md for incremental feature addition plan
+# See: _doc/vanilla-roadmap.md Stage 1
