@@ -45,7 +45,10 @@ setopt AUTO_LIST                 # List choices on ambiguous completion
 # Empty string = exact match, second pattern = case-insensitive fallback
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 
-# NOTE: No colored completions yet - testing case-insensitive first
-# NOTE: No other zstyles yet - testing matcher-list only
-# NOTE: No prompt options - using zsh defaults
+# Stage 1 Increment 3: Colored completions
+# Use LS_COLORS for file/directory coloring in completions
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+# NOTE: Stage 1 complete - basic completion working with colors
+# NOTE: No prompt options yet - using zsh defaults (% prompt)
 # See: _doc/vanilla-roadmap.md Stage 1
