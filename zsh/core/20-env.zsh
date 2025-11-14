@@ -31,6 +31,10 @@ setopt AUTO_PUSHD                # Push the old directory onto the stack on cd
 setopt PUSHD_IGNORE_DUPS         # Do not store duplicates in the stack
 setopt PUSHD_SILENT              # Do not print the directory stack after pushd or popd
 
+# Prompt options
+setopt PROMPT_SP                 # Preserve partial lines (may help with Starship rendering)
+setopt PROMPT_SUBST              # Enable parameter expansion in prompts
+
 # Correction
 setopt CORRECT                   # Spelling correction for commands
 setopt CORRECT_ALL               # Spelling correction for arguments
@@ -49,6 +53,10 @@ zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' # Case-insensitive 
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}       # Colorize completions using LS_COLORS
 zstyle ':completion:*' group-name ''                        # Group completions by type
 zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f' # Yellow headers for groups
+
+# Fix for completion list prompt rendering (Starship compatibility)
+zstyle ':completion:*' list-prompt ''                       # Disable list continuation prompt
+zstyle ':completion:*' select-prompt ''                     # Disable selection prompt
 
 # Disable beep
 unsetopt BEEP
