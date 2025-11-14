@@ -1,6 +1,12 @@
 #!/usr/bin/env zsh
-# WSL profile - Vanilla baseline (Stage 0)
-# NO PLUGINS LOADED
-#
-# This is the absolute zero starting point for incremental testing.
+# WSL profile - Stage 3: Visual Enhancements
+# Adding plugins incrementally to test for bugs
 # See: _doc/vanilla-roadmap.md for progression plan
+
+# Stage 3 Increment 1: zsh-autosuggestions
+# Ghost text from history - least likely to interfere with completion
+zinit light zsh-users/zsh-autosuggestions
+
+# Stage 3 TODO: Add more plugins incrementally:
+# - zsh-syntax-highlighting (command validation)
+# - zsh-history-substring-search (better Ctrl-R)
