@@ -4,10 +4,10 @@
 # Set zinit home directory
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
-# Configure git to use anonymous HTTPS for GitHub (no authentication required)
-# This prevents zinit from asking for credentials when cloning plugins
-git config --global url."https://github.com/".insteadOf "gh:"
-git config --global url."https://github.com/".insteadOf "github:"
+# Force git to use HTTPS for cloning (no SSH, no authentication prompts)
+# This is critical for Docker/CI environments without git credentials
+export GIT_TERMINAL_PROMPT=0  # Disable credential prompts
+export GIT_SSL_NO_VERIFY=0    # Enable SSL verification
 
 # Auto-install zinit if not present
 if [[ ! -d "$ZINIT_HOME" ]]; then
