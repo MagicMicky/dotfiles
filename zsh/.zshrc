@@ -47,14 +47,18 @@ if command -v starship &> /dev/null; then
   eval "$(starship init zsh)"
 fi
 
-# Stage 4: fzf key bindings (NO tab completion yet - testing separately)
-# Ctrl-R: fuzzy history search
-# Ctrl-T: fuzzy file finder
-# Alt-C: fuzzy directory changer
-if [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
-  source /usr/share/doc/fzf/examples/key-bindings.zsh
+# Stage 4: fzf key bindings
+# Ctrl-R: fuzzy history search, Ctrl-T: fuzzy file finder, Alt-C: fuzzy cd
+if command -v fzf &> /dev/null; then
+  # Try common fzf keybinding locations
+  if [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
+    source /usr/share/doc/fzf/examples/key-bindings.zsh
+  elif [[ -f /usr/share/fzf/key-bindings.zsh ]]; then
+    source /usr/share/fzf/key-bindings.zsh
+  elif [[ -f ~/.fzf.zsh ]]; then
+    source ~/.fzf.zsh
+  fi
 fi
-# NOTE: Intentionally NOT loading fzf tab completion (suspected bug trigger)
 
 # Stage 4: zoxide (smart directory jumping)
 if command -v zoxide &> /dev/null; then
@@ -64,5 +68,5 @@ fi
 # Print welcome message (helps identify which config is loaded)
 if [[ -o interactive ]]; then
   MACHINE_TYPE=$(cat ~/.zsh.d/.machine-type 2>/dev/null || echo "unknown")
-  echo "🔧 Vanilla baseline loaded | Profile: $MACHINE_TYPE | Stage: 4 (modern tools)"
+  echo "🔧 Vanilla baseline loaded | Profile: $MACHINE_TYPE | Stage: Complete (full baseline)"
 fi
