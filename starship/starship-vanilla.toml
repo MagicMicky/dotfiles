@@ -1,0 +1,8 @@
+# Vanilla Starship Configuration (Stage 0)
+# Absolute minimal prompt for testing
+
+format = "$character"
+
+[character]
+success_symbol = "[❯](green)"
+error_symbol = "[❯](red)"

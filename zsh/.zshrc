@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# Main zshrc - Modern shell configuration
+# Main zshrc - Vanilla baseline (Stage 0)
 # This file sources all configuration in the correct order
 
 # Determine dotfiles location dynamically
@@ -38,7 +38,6 @@ else
 fi
 
 # Source core configuration (in order)
-# Note: Machine type detection (00-detect.zsh) has been replaced by starship-env.zsh above
 for config_file in ${DOTFILES_DIR}/zsh/core/*.zsh; do
   [[ -f "$config_file" ]] && source "$config_file"
 done
@@ -84,77 +83,20 @@ if [[ -f ~/.zsh.d/zworkenv ]]; then
   source ~/.zsh.d/zworkenv
 fi
 
-# CRITICAL FIX: Initialize completion BEFORE Starship
-# This is counter-intuitive but prevents Starship from interfering with completion width calculation
+# Initialize vanilla zsh completion (NO customization)
 autoload -Uz compinit
-setopt EXTENDEDGLOB
-if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
-  compinit
-else
-  compinit -C
-fi
+compinit
 
-# CRITICAL FIX: Disable list packing and force single-column if needed
-# List packing can cause cursor position miscalculation
-zstyle ':completion:*:default' list-packed false
-zstyle ':completion:*:default' list-rows-first false
+# NO Starship initialization - using system default prompt (%)
+# See: _doc/vanilla-roadmap.md Stage 2 for prompt addition
 
-# Initialize Starship prompt AFTER completion system
-if command -v starship &> /dev/null; then
-  # Use generated starship config (Ansible creates ~/.config/starship.toml with machine-specific colors)
-  # If not found, fall back to dotfiles version
-  if [[ -f ~/.config/starship.toml ]]; then
-    export STARSHIP_CONFIG=~/.config/starship.toml
-  elif [[ -f "${DOTFILES_DIR}/starship/starship.toml" ]]; then
-    export STARSHIP_CONFIG="${DOTFILES_DIR}/starship/starship.toml"
-  fi
-  eval "$(starship init zsh)"
+# NO fzf integration - disabled for vanilla testing
+# See: _doc/vanilla-roadmap.md Stage 4 for fzf re-enablement
 
-  # CRITICAL: Force prompt reset on every command
-  # This recalculates prompt width to prevent character duplication
-  autoload -Uz add-zsh-hook
-  _starship_reset_prompt() {
-    # Reset zsh line editor state
-    zle && zle reset-prompt
-    return 0
-  }
-  add-zsh-hook precmd _starship_reset_prompt
-fi
+# NO zoxide integration - disabled for vanilla testing
+# See: _doc/vanilla-roadmap.md Stage 4 for modern tools
 
-# Initialize modern tools
-# fzf - Fuzzy finder
-if command -v fzf &> /dev/null; then
-  # fzf configuration (set before loading scripts)
-  export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
-
-  # Use fd if available for fzf
-  if command -v fd &> /dev/null; then
-    export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
-    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-    export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
-  fi
-
-  # Load fzf key bindings ONLY (not completion)
-  # fzf completion causes character duplication bug with tab completion
-  if [[ -f ~/.fzf.zsh ]]; then
-    source ~/.fzf.zsh
-  elif [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
-    source /usr/share/doc/fzf/examples/key-bindings.zsh
-  fi
-
-  # DISABLED: fzf tab completion interferes with zsh completion rendering
-  # You still get fzf functionality via Ctrl-T (files), Ctrl-R (history), Alt-C (dirs)
-  # if [[ -f /usr/share/doc/fzf/examples/completion.zsh ]]; then
-  #   source /usr/share/doc/fzf/examples/completion.zsh
-  # fi
-fi
-
-# zoxide - Smart directory jumper
-if command -v zoxide &> /dev/null; then
-  eval "$(zoxide init zsh)"
-fi
-
-# Print welcome message (optional, can be removed if annoying)
+# Print welcome message (helps identify which config is loaded)
 if [[ -o interactive ]]; then
-  echo "🚀 Modern shell loaded | Machine: $MACHINE_TYPE"
+  echo "🔧 Vanilla baseline loaded | Machine: $MACHINE_TYPE | Stage: 0"
 fi
