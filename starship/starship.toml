@@ -6,7 +6,7 @@
 format = """
 $username\
 $hostname\
-[\\[${env_var.STARSHIP_ENV_CHAR}\\]](bold ${env_var.STARSHIP_ENV_COLOR}) \
+[\\[$env_var.STARSHIP_ENV_CHAR\\]](bold $env_var.STARSHIP_ENV_COLOR) \
 $directory\
 $git_branch\
 $git_status\
@@ -48,7 +48,7 @@ default = "#82AAFF"
 
 # Directory
 [directory]
-style = "bold ${env_var.STARSHIP_ENV_COLOR}"
+style = "bold $env_var.STARSHIP_ENV_COLOR"
 truncation_length = 3
 truncate_to_repo = true
 format = "[$path]($style)"

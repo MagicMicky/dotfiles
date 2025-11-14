@@ -52,11 +52,13 @@ zstyle ':completion:*' menu select                          # Enable arrow key n
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' # Case-insensitive matching
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}       # Colorize completions using LS_COLORS
 zstyle ':completion:*' group-name ''                        # Group completions by type
-zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f' # Yellow headers for groups
+# TEMPORARILY DISABLED: May interfere with prompt width calculation
+# zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f' # Yellow headers for groups
 
 # Fix for completion list prompt rendering (Starship compatibility)
 zstyle ':completion:*' list-prompt ''                       # Disable list continuation prompt
 zstyle ':completion:*' select-prompt ''                     # Disable selection prompt
+zstyle ':completion:*:default' list-prompt ''               # Explicitly disable for default context
 
 # Disable beep
 unsetopt BEEP

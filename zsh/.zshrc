@@ -95,15 +95,10 @@ if command -v starship &> /dev/null; then
   fi
   eval "$(starship init zsh)"
 
-  # Workaround for Starship + completion menu rendering bug
-  # Force zsh to recalculate prompt length after Starship initialization
-  # This fixes character duplication when completion menu appears
-  autoload -Uz add-zsh-hook
-  _fix_prompt_length() { true; }
-  add-zsh-hook precmd _fix_prompt_length
 fi
 
-# Initialize completion system AFTER Starship
+# CRITICAL FIX: Completion rendering with Starship
+# Initialize completion system AFTER Starship and apply fixes
 # This ensures prompt length calculations are correct (prevents character doubling in tab completion)
 autoload -Uz compinit
 # Only regenerate compdump once a day for performance
@@ -113,6 +108,13 @@ if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
 else
   compinit -C
 fi
+
+# CRITICAL: Reset prompt after compinit to fix width calculation
+# This is the KEY fix for the duplication bug with Starship
+# Forces zsh to recalculate prompt dimensions after completion system loads
+zle -N zle-line-init
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd () { PROMPT_EOL_MARK='' }
 
 # Initialize modern tools
 # fzf - Fuzzy finder
