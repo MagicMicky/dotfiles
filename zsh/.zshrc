@@ -47,14 +47,22 @@ if command -v starship &> /dev/null; then
   eval "$(starship init zsh)"
 fi
 
-# NO fzf integration - disabled for vanilla testing
-# See: _doc/vanilla-roadmap.md Stage 4 for fzf re-enablement
+# Stage 4: fzf key bindings (NO tab completion yet - testing separately)
+# Ctrl-R: fuzzy history search
+# Ctrl-T: fuzzy file finder
+# Alt-C: fuzzy directory changer
+if [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
+  source /usr/share/doc/fzf/examples/key-bindings.zsh
+fi
+# NOTE: Intentionally NOT loading fzf tab completion (suspected bug trigger)
 
-# NO zoxide integration - disabled for vanilla testing
-# See: _doc/vanilla-roadmap.md Stage 4 for modern tools
+# Stage 4: zoxide (smart directory jumping)
+if command -v zoxide &> /dev/null; then
+  eval "$(zoxide init zsh)"
+fi
 
 # Print welcome message (helps identify which config is loaded)
 if [[ -o interactive ]]; then
   MACHINE_TYPE=$(cat ~/.zsh.d/.machine-type 2>/dev/null || echo "unknown")
-  echo "🔧 Vanilla baseline loaded | Profile: $MACHINE_TYPE | Stage: 3 (visual plugins)"
+  echo "🔧 Vanilla baseline loaded | Profile: $MACHINE_TYPE | Stage: 4 (modern tools)"
 fi
