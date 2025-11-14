@@ -56,6 +56,11 @@ zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 # Use LS_COLORS for file/directory coloring in completions
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
+# Enable arrow key navigation in completion menu
+zstyle ':completion:*' menu select
+# Load the complist module for enhanced menu navigation
+zmodload zsh/complist
+
 # Stage 2: Testing prompt-related setopts
 # Starship sets PROMPT_SUBST which may cause completion issues
 # Testing workaround: disable PROMPT_SUBST after Starship init
