@@ -21,3 +21,14 @@ source "${ZINIT_HOME}/zinit.zsh"
 # Enable completion cache for faster lookups (when compinit is called later)
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ${ZDOTDIR:-$HOME}/.zsh/cache
+
+# ============================================================================
+# Universal plugins - Loaded on ALL machine types (workstation/homelab/server)
+# ============================================================================
+
+# Ghost text suggestions from command history
+zinit light zsh-users/zsh-autosuggestions
+
+# Real-time syntax highlighting and command validation
+# NOTE: MUST load LAST - do not add plugins after this line
+zinit light zdharma-continuum/zsh-fast-syntax-highlighting

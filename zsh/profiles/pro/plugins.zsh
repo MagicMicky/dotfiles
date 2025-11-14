@@ -1,6 +1,12 @@
 #!/usr/bin/env zsh
-# Pro profile - Vanilla baseline (Stage 0)
-# NO PLUGINS LOADED
-#
-# This is the absolute zero starting point for incremental testing.
-# See: _doc/vanilla-roadmap.md for progression plan
+# Pro profile - Workstation enhancements
+# Core plugins (autosuggestions, syntax-highlighting) loaded from core/01-zinit.zsh
+# This file contains only workstation-specific enhancements
+
+# ============================================================================
+# Workstation-specific plugins
+# ============================================================================
+
+# fzf-tab: Fuzzy finder interface for tab completions
+# Replaces default completion menu with fzf for better searchability
+zinit light Aloxaf/fzf-tab

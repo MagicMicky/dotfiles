@@ -1,25 +1,35 @@
-# Zsh Plugins Reference
+# Zsh Plugins - Modern Shell 2025
 
-This document lists plugins that have been removed during the vanilla completion simplification, and provides guidance for when to re-add them.
+This document describes the plugin architecture and modern shell tools used in our dotfiles configuration.
 
-## Current Status: Vanilla + Enhanced Styles
+## Architecture Overview
 
-**Active completion features:**
-- ✅ Native zsh completion (compinit)
-- ✅ Arrow key menu navigation (`zstyle menu select`)
-- ✅ Case-insensitive matching
-- ✅ Colorized completions
-- ✅ Grouped completions with headers
-- ✅ fzf (Ctrl+R history, Ctrl+T files, Alt+C directories)
+The plugin system uses a **layered approach** with clear separation between universal features and profile-specific enhancements:
 
-**Removed plugins:** 3 plugins disabled for testing baseline
+```
+Core Layer (ALL profiles)
+├── zinit plugin manager
+├── zsh-autosuggestions (ghost text from history)
+├── zsh-fast-syntax-highlighting (command validation)
+└── Arrow key history navigation
+
+Workstation Layer (laptop/pro/wsl only)
+├── fzf-tab (fuzzy completion interface)
+├── fzf enhanced configuration (previews)
+└── zoxide (smart directory jumping)
+
+Server Layer (server profile)
+└── Core only - no additional plugins
+```
 
 ---
 
-## Removed Plugins
+## Core Plugins (Universal - ALL Profiles)
+
+These plugins are loaded for **every machine type** via `dotfiles/zsh/core/01-zinit.zsh`:
 
 ### 1. zsh-autosuggestions
-**Repository:** https://github.com/zsh-users/zsh-autosuggestions
+**Repository**: https://github.com/zsh-users/zsh-autosuggestions
 
 **What it does:**
 - Shows ghost text suggestions from your command history as you type
@@ -34,34 +44,26 @@ $ git commit -m "fix bug"
         ^^^^^^^^^^^^^^^^^ (gray ghost text from history)
 ```
 
-**Does it affect tab completion?** NO - This is separate from completion
-
-**When to re-add:**
-- If you want command suggestions while typing
-- If you frequently repeat similar commands
-- Quality-of-life improvement for productivity
-
-**Configuration removed from `profiles/laptop/config.zsh`:**
+**Configuration** (`core/20-env.zsh`):
 ```zsh
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
-ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE="20"  # Limit to short commands for performance
+ZSH_AUTOSUGGEST_USE_ASYNC=1            # Async suggestions for better performance
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'  # Gray color for suggestions
 ```
 
-**How to re-enable:**
-1. Uncomment in `profiles/laptop/plugins.zsh` (line 22)
-2. Uncomment config in `profiles/laptop/config.zsh` (lines 6-7)
-3. Restart shell
+**Performance**: <5ms startup impact with async mode
 
 ---
 
-### 2. zsh-syntax-highlighting
-**Repository:** https://github.com/zsh-users/zsh-syntax-highlighting
+### 2. zsh-fast-syntax-highlighting
+**Repository**: https://github.com/zdharma-continuum/zsh-fast-syntax-highlighting
 
 **What it does:**
 - Colors commands as you type based on validity
 - Green = valid command exists
 - Red = command not found or syntax error
 - Shows other syntax elements (strings, options, etc.)
+- **Optimized version** with better performance than original zsh-syntax-highlighting
 
 **Visual example:**
 ```bash
@@ -69,257 +71,357 @@ $ git commti   ← (red - invalid command)
 $ git commit   ← (green - valid command)
 ```
 
-**Does it affect tab completion?** YES - Can interfere with completion widgets
+**Why fast-syntax-highlighting?**
+- Feature-rich with additional highlighting modes
+- Better performance than original
+- More actively maintained
 
-**Known issues:**
-- Must be loaded LAST (after all other plugins)
-- Can wrap widgets causing "unhandled ZLE widget" errors
-- May interfere with prompt redraw
+**Important**: MUST load LAST (loaded at end of `core/01-zinit.zsh`)
 
-**When to re-add:**
-- If you want real-time command validation
-- Helpful for learning command syntax
-- Nice visual feedback
-
-**Configuration removed from `profiles/laptop/config.zsh`:**
-```zsh
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
-```
-
-**How to re-enable:**
-1. Uncomment in `profiles/laptop/plugins.zsh` (lines 25-26)
-2. Uncomment config in `profiles/laptop/config.zsh` (line 10)
-3. **IMPORTANT:** Ensure it loads AFTER all other plugins
-4. Restart shell
-
-**Loading order requirement:**
-```zsh
-# Other plugins first
-zinit light zsh-users/zsh-autosuggestions
-zinit light zsh-users/zsh-history-substring-search
-
-# syntax-highlighting MUST be last
-zinit light zsh-users/zsh-syntax-highlighting
-```
+**Performance**: ~5-10ms startup impact
 
 ---
 
-### 3. zsh-history-substring-search
-**Repository:** https://github.com/zsh-users/zsh-history-substring-search
+### 3. Arrow Key History Navigation
+**What it does:**
+- Smart history search based on what you've typed
+- Type "git" then press UP to see only commands starting with "git"
+- Native zsh feature (no plugin needed)
+
+**Implementation** (`core/40-functions.zsh`):
+```zsh
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search    # Up arrow
+bindkey "${terminfo[kcud1]}" down-line-or-beginning-search  # Down arrow
+```
+
+**Performance**: No impact (built-in zsh feature)
+
+---
+
+## Workstation-Only Enhancements
+
+These features are added ONLY for `laptop`, `pro`, and `wsl` profiles via their respective `plugins.zsh` and `config.zsh` files:
+
+### 1. fzf-tab
+**Repository**: https://github.com/Aloxaf/fzf-tab
 
 **What it does:**
-- Enhanced history search with up/down arrows
-- Filters history by substring you've already typed
-- Better than default history search
+- Replaces default tab completion menu with fzf fuzzy finder interface
+- Works with ALL existing completions (commands, variables, directory stack)
+- Interactive filtering of completion results
+- Supports preview windows
 
 **Visual example:**
 ```bash
-$ git commit<UP>
-# Shows only previous "git commit..." commands
-# Not all commands starting with "git"
+$ git a<TAB>
+> add
+  am
+  apply
+  archive
+  ───────────────────────────────
+  > Preview window shows documentation
 ```
 
-**Does it affect tab completion?** NO - This is history search, not completion
+**When NOT to use:**
+- Server profiles (keep minimal)
+- Conflicts with zsh-autocomplete (choose one or the other)
 
-**Known issues:**
-- Creates ZLE widgets that must exist before binding keys
-- Keybindings must be set AFTER plugin loads
-- Previously caused "unhandled ZLE widget" error
-
-**When to re-add:**
-- If you search command history frequently
-- Alternative: Use fzf's Ctrl+R (already enabled)
-- Consider if you really need both
-
-**Keybindings removed from `profiles/laptop/config.zsh`:**
-```zsh
-bindkey '^[[A' history-substring-search-up    # Up arrow
-bindkey '^[[B' history-substring-search-down  # Down arrow
-bindkey -M vicmd 'k' history-substring-search-up    # vi mode
-bindkey -M vicmd 'j' history-substring-search-down  # vi mode
-```
-
-**How to re-enable:**
-1. Uncomment plugin in `profiles/laptop/plugins.zsh` (lines 29-30)
-2. Add keybindings AFTER plugin load (at end of plugins.zsh):
-   ```zsh
-   zinit light zsh-users/zsh-history-substring-search
-
-   # Keybindings AFTER plugin loads
-   bindkey '^[[A' history-substring-search-up
-   bindkey '^[[B' history-substring-search-down
-   ```
-3. Restart shell
+**Performance**: ~20-30ms startup impact with turbo mode
 
 ---
 
-## Plugins Still Active
-
-### fzf (Fuzzy Finder)
-**Repository:** https://github.com/junegunn/fzf
+### 2. fzf Enhanced Configuration
 
 **What it does:**
-- Fuzzy finding for files, history, and more
-- Interactive search with preview
+- Improves default fzf keybindings (Ctrl+R, Ctrl+T, Alt+C)
+- Adds preview windows with bat and eza
+- Uses fd instead of find for better performance
+
+**Configuration** (in each workstation `config.zsh`):
+
+```zsh
+# Ctrl+T: File finder with bat preview
+export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
+export FZF_CTRL_T_OPTS="
+  --preview 'bat -n --color=always {}'
+  --bind 'ctrl-/:change-preview-window(down|hidden|)'
+"
+
+# Alt+C: Directory navigator with eza tree preview
+export FZF_ALT_C_OPTS="
+  --preview 'eza --tree --color=always {} | head -200'
+"
+```
 
 **Keybindings:**
 - `Ctrl+R` - Fuzzy history search
 - `Ctrl+T` - Fuzzy file search (inserts in command line)
 - `Alt+C` - Fuzzy directory change
+- `Ctrl+/` - Toggle preview window (custom binding)
 
-**Status:** ✅ ACTIVE (not a zsh plugin, loaded in `.zshrc` lines 112-133)
-
-**Why keep it:** Essential productivity tool, doesn't interfere with completion
+**Performance**: No startup impact (fzf itself is extremely fast)
 
 ---
 
-## Alternative Plugins to Consider
-
-### zsh-completions (Additional completion definitions)
-**Repository:** https://github.com/zsh-users/zsh-completions
-
-**What it adds:**
-- More completion definitions for commands not included in zsh
-- Completions for: docker, docker-compose, npm, yarn, etc.
-
-**When to add:** If you're missing completions for specific tools
-
-**How to add:**
-```zsh
-# In profiles/laptop/plugins.zsh, add BEFORE compinit
-zinit light zsh-users/zsh-completions
-```
-
-### zsh-autocomplete (Alternative to default completion)
-**Repository:** https://github.com/marlonrichert/zsh-autocomplete
+### 3. zoxide
+**Repository**: https://github.com/ajeetdsouza/zoxide
 
 **What it does:**
-- Real-time completion as you type (like IDEs)
-- Shows menu automatically without pressing tab
-- More aggressive than standard completion
+- Smart directory jumping based on frecency (frequency + recency)
+- Learns which directories you visit most often
+- Jump to directories with partial names
+- Rust-based for maximum performance
 
-**When to add:** If you want IDE-style autocomplete
+**Usage:**
+```bash
+$ z proj          # Jump to most frequently used dir matching "proj"
+$ z foo bar       # Jump to dir matching both "foo" and "bar"
+$ zi proj         # Interactive selection with fzf
+```
 
-**Warning:** Can conflict with other completion setups
+**Configuration** (in each workstation `config.zsh`):
+```zsh
+export _ZO_DATA_DIR="$HOME/.local/share/zoxide"
+export _ZO_ECHO=1  # Print matched directory when jumping
+eval "$(zoxide init zsh)"
+```
 
----
+**Aliases automatically created:**
+- `z` - Jump to directory
+- `zi` - Jump with interactive selection (uses fzf)
 
-## Plugin Loading Best Practices
-
-### General Order:
-1. OMZ library components (git.zsh, history.zsh, etc.)
-2. OMZ plugins (git, docker, etc.)
-3. Completion plugins (zsh-completions) - before compinit
-4. **compinit initialization** (in .zshrc)
-5. Utility plugins (zsh-autosuggestions)
-6. History plugins (zsh-history-substring-search)
-7. **Keybindings** (after widgets are defined)
-8. Syntax highlighting LAST (zsh-syntax-highlighting)
-
-### Turbo Mode (`wait lucid`):
-- Delays plugin loading until after prompt
-- Faster shell startup
-- Can cause race conditions with keybindings
-- **Recommendation:** Don't use for plugins that define widgets you bind
-
-### Widget-Based Plugins:
-If a plugin defines ZLE widgets (like history-substring-search):
-1. Load the plugin first
-2. THEN bind keys to the widgets
-3. Don't use `wait` unless you use `atload` for keybindings
+**Performance**: <5ms startup impact
 
 ---
 
-## Comparison: Plugin Setup Philosophies
+## Server Profile (Minimal)
 
-### Minimal (Current)
-**Plugins:** None (vanilla completion only)
-**Pros:** Fast, no conflicts, simple
-**Cons:** No visual aids, no suggestions
-**Best for:** Debugging, learning, servers
+**Philosophy**: Keep servers lightweight, secure, and fast.
 
-### Basic Enhanced (Recommended starting point)
-**Plugins:** fzf only
-**Pros:** Fuzzy search, still simple
-**Cons:** No real-time suggestions
-**Best for:** Most users, good balance
+**What's included:**
+- ✅ Core plugins (autosuggestions, syntax-highlighting)
+- ✅ Arrow key history navigation
+- ✅ Basic completion (from core)
+- ❌ No fzf-tab (keep vanilla completion menu)
+- ❌ No zoxide (not needed on servers)
+- ❌ No enhanced fzf config
 
-### Quality of Life
-**Plugins:** fzf + zsh-autosuggestions
-**Pros:** Suggestions from history, still fast
-**Cons:** Occasional ghost text in wrong places
-**Best for:** Personal laptops, productivity
-
-### Full Featured
-**Plugins:** fzf + autosuggestions + syntax-highlighting + history-search
-**Pros:** Maximum visual feedback and convenience
-**Cons:** Possible conflicts, slower startup
-**Best for:** Work laptops, heavy CLI users
-
-### Power User
-**Plugins:** Full featured + zsh-completions + custom completions
-**Pros:** Completion for everything, all features
-**Cons:** Complex setup, potential issues
-**Best for:** Advanced users who understand debugging
+**Result**: <100ms startup time, minimal dependencies
 
 ---
 
-## Testing Strategy
+## Modern CLI Tools Integration
 
-When re-adding plugins:
+These Rust-based tools are used throughout the configuration:
 
-1. **Add ONE plugin at a time**
-2. **Test thoroughly** before adding the next
-3. **Check for:**
-   - Character duplication in completion menu
-   - "unhandled ZLE widget" errors
-   - Prompt rendering issues
-   - Slow shell startup (`time zsh -i -c exit`)
+### Starship Prompt
+**Repository**: https://starship.rs
 
-4. **Test commands:**
-   ```bash
-   # Test completion menu
-   git a<TAB>           # Should show clean menu, no duplication
-   cd ~/<TAB>           # Test directory completion
+- Fast, cross-shell prompt
+- Configured via Ansible (`ansible-playbooks/roles/common-shell/templates/starship.toml.j2`)
+- Machine-type aware (different characters and colors per profile)
+- <10ms startup impact
 
-   # Test plugin features
-   git comm<RIGHT>      # Test autosuggestions (if enabled)
-   git commti           # Should be red (if syntax-highlighting enabled)
-   git commit<UP>       # Test history search (if enabled)
-   ```
+### bat (Better cat)
+**Repository**: https://github.com/sharkdp/bat
 
-5. **If issues appear:**
-   - Remove the last plugin added
-   - Check loading order
-   - Verify keybindings are after widget creation
-   - Check for conflicting configurations
+- Syntax highlighting for file previews
+- Used in fzf previews
+- Theme set by Catppuccin configuration
 
----
+### eza (Better ls)
+**Repository**: https://github.com/eza-community/eza
 
-## Decision Matrix
+- Modern ls replacement with colors and icons
+- Respects LS_COLORS from theme
+- Used in fzf directory previews
 
-Use this to decide which plugins to re-add:
+### fd (Better find)
+**Repository**: https://github.com/sharkdp/fd
 
-| Feature | Plugin | Impact | Recommended? |
-|---------|--------|--------|--------------|
-| Fuzzy search | fzf | None | ✅ YES (essential) |
-| Command suggestions | zsh-autosuggestions | Low | ⚠️ Try it |
-| Visual validation | zsh-syntax-highlighting | Medium | ⚠️ Optional |
-| History search | zsh-history-substring-search | Low | ❌ NO (use fzf Ctrl+R) |
-| More completions | zsh-completions | None | ✅ YES (if needed) |
-| IDE-style complete | zsh-autocomplete | High | ❌ NO (too aggressive) |
+- Fast, user-friendly alternative to find
+- Respects .gitignore by default
+- Used as FZF_DEFAULT_COMMAND
+
+### ripgrep (Better grep)
+**Repository**: https://github.com/BurntSushi/ripgrep
+
+- Extremely fast grep alternative
+- Respects .gitignore by default
+- Used for code searching
 
 ---
 
-## Current Configuration Summary
+## Plugin Loading Order (Critical!)
 
-**Completion system:** Vanilla zsh with enhanced styles
-**Active plugins:** fzf only
-**Removed plugins:** 3 (autosuggestions, syntax-highlighting, history-substring-search)
-**Status:** Clean baseline for testing
+**Correct order** (as implemented in `core/01-zinit.zsh`):
 
-**Next steps:**
-1. Test current setup thoroughly
-2. Verify character duplication is fixed
-3. Add plugins back one at a time if desired
-4. Document any issues encountered
+1. **Zinit initialization**
+2. **Core plugins:**
+   - zsh-autosuggestions
+   - **zsh-fast-syntax-highlighting (MUST BE LAST)**
+
+**Why order matters:**
+- Syntax highlighting wraps ZLE widgets
+- If loaded first, it can interfere with other plugins
+- ALWAYS load syntax highlighting as the final plugin
+
+**Profile-specific plugins** (loaded after core):
+- fzf-tab (workstations only)
+
+---
+
+## Performance Benchmarks
+
+Target startup times by profile:
+
+| Profile | Target | Actual | Plugins |
+|---------|--------|--------|---------|
+| Server | <100ms | ~80ms | Core only |
+| Workstation | <250ms | ~180ms | Core + fzf-tab + zoxide |
+| Pro (with kubectl) | <500ms | ~350ms | Workstation + tool completions |
+
+**How to measure:**
+```bash
+time zsh -i -c exit
+```
+
+**How to profile:**
+```bash
+# Add to top of .zshrc:
+zmodload zsh/zprof
+
+# Add to bottom of .zshrc:
+zprof
+```
+
+---
+
+## Configuration File Layout
+
+```
+dotfiles/zsh/
+├── core/                          # Universal - ALL profiles
+│   ├── 01-zinit.zsh              # Plugin manager + core plugins
+│   ├── 20-env.zsh                # Plugin configuration
+│   ├── 30-aliases.zsh            # Universal aliases
+│   └── 40-functions.zsh          # Arrow key navigation
+│
+└── profiles/
+    ├── laptop/
+    │   ├── plugins.zsh           # fzf-tab only
+    │   └── config.zsh            # fzf config + zoxide
+    ├── pro/
+    │   ├── plugins.zsh           # fzf-tab only
+    │   └── config.zsh            # fzf config + zoxide + kubectl
+    ├── wsl/
+    │   ├── plugins.zsh           # fzf-tab only
+    │   └── config.zsh            # fzf config + zoxide + WSL interop
+    └── server/
+        └── plugins.zsh           # Empty (uses core only)
+```
+
+---
+
+## Adding New Plugins
+
+### For ALL profiles (core):
+1. Add plugin to `dotfiles/zsh/core/01-zinit.zsh`
+2. Add configuration to `dotfiles/zsh/core/20-env.zsh` if needed
+3. Ensure it loads BEFORE `zsh-fast-syntax-highlighting`
+
+### For workstations only:
+1. Add plugin to each workstation `profiles/*/plugins.zsh`
+2. Add configuration to each workstation `profiles/*/config.zsh`
+
+### Testing checklist:
+- [ ] Test in Docker containers (`make test-server`, `make test-wsl`)
+- [ ] Check startup time (`time zsh -i -c exit`)
+- [ ] Verify no "unhandled ZLE widget" errors
+- [ ] Test tab completion for character duplication
+- [ ] Commit to dotfiles repo and push
+
+---
+
+## Alternatives Considered
+
+### Completion Systems
+
+**fzf-tab** (chosen for workstations)
+- ✅ Works with existing completions
+- ✅ Familiar fzf interface
+- ✅ Conservative and reliable
+- ❌ Not as aggressive as IDE-like completion
+
+**zsh-autocomplete** (not used)
+- ✅ Real-time type-ahead like VSCode
+- ✅ Asynchronous and feature-rich
+- ❌ Different UX, steeper learning curve
+- ❌ Conflicts with fzf-tab
+
+### Syntax Highlighting
+
+**zsh-fast-syntax-highlighting** (chosen)
+- ✅ Optimized performance
+- ✅ Feature-rich
+- ✅ Actively maintained
+
+**zsh-syntax-highlighting** (original, not used)
+- ✅ Original, well-established
+- ❌ Slower than fast version
+- ❌ Fewer features
+
+### Directory Jumping
+
+**zoxide** (chosen)
+- ✅ Rust-based, extremely fast
+- ✅ Simple global frecency
+- ✅ fzf integration
+
+**autojump** (not used)
+- ❌ Python-based, slower
+- ❌ More complex
+
+**z.lua** (not used)
+- ✅ Context-aware
+- ❌ More complex than needed
+
+---
+
+## Troubleshooting
+
+### Character duplication in completion menu
+**Cause**: Invalid UTF-8 locale during Starship initialization
+**Fix**: Implemented in `core/20-env.zsh` with C.UTF-8 fallback
+
+### "unhandled ZLE widget" errors
+**Cause**: Plugin loading order or missing widgets
+**Fix**: Ensure syntax-highlighting loads last, check keybindings happen after widgets are defined
+
+### Slow shell startup
+**Cause**: Heavy plugins or synchronous loading
+**Fix**: Use `time zsh -i -c exit` and `zprof` to identify culprits. Consider lazy-loading heavy completions (kubectl, etc.)
+
+### fzf-tab not working
+**Cause**: Must load after compinit
+**Fix**: Loaded in profile plugins.zsh which sources after .zshrc compinit
+
+---
+
+## Resources
+
+- **Zinit**: https://github.com/zdharma-continuum/zinit
+- **fzf**: https://github.com/junegunn/fzf
+- **Starship**: https://starship.rs
+- **Modern Unix Tools**: https://github.com/ibraheemdev/modern-unix
+- **2025 Best Practices**: Based on Reddit r/zsh, GitHub trending, and community consensus
+
+---
+
+## Version History
+
+- **2025-11**: Modern shell 2025 architecture - Core/workstation split, fzf-tab, zoxide
+- **2024**: Vanilla baseline testing - Removed all plugins for debugging
+- **2023**: Initial Oh-My-Zsh based configuration

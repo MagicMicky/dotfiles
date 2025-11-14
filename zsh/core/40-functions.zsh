@@ -78,3 +78,22 @@ function gi() {
   # Get .gitignore from gitignore.io
   curl -sL "https://www.gitignore.io/api/$1"
 }
+
+# ============================================================================
+# Arrow key history navigation - Universal feature for all profiles
+# ============================================================================
+
+# Smart history search: searches for commands that start with what you've typed
+# Example: type "git" and press UP to see only commands starting with "git"
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+
+# Bind to arrow keys using terminfo (portable across terminals)
+bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search    # Up arrow
+bindkey "${terminfo[kcud1]}" down-line-or-beginning-search  # Down arrow
+
+# Fallback bindings for terminals without proper terminfo
+bindkey "^[[A" up-line-or-beginning-search  # Up arrow fallback
+bindkey "^[[B" down-line-or-beginning-search  # Down arrow fallback

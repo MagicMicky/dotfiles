@@ -63,3 +63,12 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 # NOTE: Stage 1 complete - basic completion working with colors
 # See: _doc/vanilla-roadmap.md Stage 2
+
+# ============================================================================
+# Plugin Configuration - Universal settings for core plugins
+# ============================================================================
+
+# zsh-autosuggestions configuration
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE="20"
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'

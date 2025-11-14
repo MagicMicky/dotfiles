@@ -1,6 +1,4 @@
 #!/usr/bin/env zsh
-# Server profile - Vanilla baseline (Stage 0)
-# NO PLUGINS LOADED
-#
-# This is the absolute zero starting point for incremental testing.
-# See: _doc/vanilla-roadmap.md for progression plan
+# Server profile - Minimal configuration
+# Core plugins (autosuggestions, syntax-highlighting) loaded from core/01-zinit.zsh
+# No additional server-specific plugins needed - keep it lightweight

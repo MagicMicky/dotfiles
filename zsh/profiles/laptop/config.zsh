@@ -6,22 +6,33 @@ if [[ -f "$HOME/.config/shell/theme.zsh" ]]; then
   source "$HOME/.config/shell/theme.zsh"
 fi
 
-# Plugin configurations - DISABLED (plugins removed)
-# zsh-autosuggestions configuration
-# ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
-# ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+# ============================================================================
+# Workstation-specific tool configuration
+# ============================================================================
 
-# zsh-syntax-highlighting configuration
-# ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
+# fzf - Enhanced fuzzy finder configuration with previews
+if command -v fzf &> /dev/null; then
+  # Use fd for file finding (faster, respects .gitignore)
+  if command -v fd &> /dev/null; then
+    export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  fi
 
-# History substring search keybindings - DISABLED (plugin removed)
-# Bind up and down arrow keys
-# bindkey '^[[A' history-substring-search-up
-# bindkey '^[[B' history-substring-search-down
+  # Ctrl+T: File finder with bat preview
+  if command -v bat &> /dev/null; then
+    export FZF_CTRL_T_OPTS="
+      --preview 'bat -n --color=always {}'
+      --bind 'ctrl-/:change-preview-window(down|hidden|)'
+    "
+  fi
 
-# Also bind k and j in vi mode
-# bindkey -M vicmd 'k' history-substring-search-up
-# bindkey -M vicmd 'j' history-substring-search-down
+  # Alt+C: Directory navigator with eza tree preview
+  if command -v eza &> /dev/null; then
+    export FZF_ALT_C_OPTS="
+      --preview 'eza --tree --color=always {} | head -200'
+    "
+  fi
+fi
 
 # Modern tools configuration
 # bat - theme set by theme.zsh, just set style preferences
@@ -31,8 +42,9 @@ fi
 
 # eza - colors set by theme.zsh (respects LS_COLORS)
 
-# zoxide
+# zoxide - Smart directory jumping
 if command -v zoxide &> /dev/null; then
   export _ZO_DATA_DIR="$HOME/.local/share/zoxide"
   export _ZO_ECHO=1
+  eval "$(zoxide init zsh)"
 fi
