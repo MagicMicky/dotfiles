@@ -1,17 +1,25 @@
 #!/usr/bin/env zsh
 # Universal aliases - Common across all machine types
+# Profile-specific aliases go in profiles/*/overrides.zsh
 
-# Docker Compose aliases
+# =============================================================================
+# Docker & Docker Compose (universal - used on all machines)
+# =============================================================================
+
+# Docker Compose
 alias dcup='docker-compose up'
+alias dcu='docker-compose up -d'
 alias dcb='docker-compose build'
 alias dcps='docker-compose ps'
 alias dcdwn='docker-compose down'
+alias dcd='docker-compose down'
 alias dcrun='docker-compose run'
 alias dcpull='docker-compose pull'
 alias dclogs='docker-compose logs'
+alias dcl='docker-compose logs -f'
 alias dcrestart='docker-compose restart'
 
-# Docker aliases
+# Docker
 alias dps='docker ps'
 alias dpsa='docker ps -a'
 alias di='docker images'
@@ -26,7 +34,27 @@ alias dexec='docker exec -it'
 alias dokcer='docker'
 alias docekr='docker'
 
-# General shortcuts
+# =============================================================================
+# Git (universal - git is everywhere)
+# =============================================================================
+
+alias g='git'
+alias gs='git status'
+alias gst='git status'
+alias ga='git add'
+alias gaa='git add --all'
+alias gc='git commit'
+alias gcm='git commit -m'
+alias gp='git push'
+alias gl='git pull'
+alias gco='git checkout'
+alias gcb='git checkout -b'
+alias glog='git log --oneline --graph --decorate'
+
+# =============================================================================
+# Navigation & Directory (universal)
+# =============================================================================
+
 alias ll='ls -lh'
 alias la='ls -lAh'
 alias l='ls -lah'
@@ -34,24 +62,31 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
-# Git aliases (basic - more provided by OMZ git plugin)
-alias g='git'
-alias gs='git status'
-alias ga='git add'
-alias gc='git commit'
-alias gp='git push'
-alias gl='git pull'
+# Development navigation (universal pattern, may be overridden per profile)
+alias dev='cd ~/Development'
+alias dots='cd ~/Development/dotfiles'
 
-# Safety aliases
+# =============================================================================
+# Shell utilities (universal)
+# =============================================================================
+
+alias h='history'
+alias c='clear'
+alias reload='source ~/.zshrc'
+alias zshconfig='${EDITOR} ~/.zshrc'
+
+# =============================================================================
+# Safety aliases (universal - good practice everywhere)
+# =============================================================================
+
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 
-# Navigation
-alias dev='cd ~/Development'
-alias dots='cd ~/Development/dotfiles'
+# =============================================================================
+# Modern tool replacements (universal - if installed)
+# =============================================================================
 
-# Modern tool replacements (if installed)
 if command -v eza &> /dev/null; then
   alias ls='eza'
   alias ll='eza -l'
@@ -66,4 +101,8 @@ fi
 
 if command -v fd &> /dev/null; then
   alias find='fd'
+fi
+
+if command -v rg &> /dev/null; then
+  alias grep='rg'
 fi

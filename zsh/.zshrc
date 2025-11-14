@@ -38,11 +38,13 @@ else
 fi
 
 # Source core configuration (in order)
+# Includes: zinit, path, env, aliases (universal), functions
 for config_file in ${DOTFILES_DIR}/zsh/core/*.zsh; do
   [[ -f "$config_file" ]] && source "$config_file"
 done
 
 # Source profile-specific configuration based on machine type (set at install time)
+# Profiles contain: plugins.zsh, config.zsh, overrides.zsh (profile-specific aliases only)
 case "$MACHINE_TYPE" in
   personal|pro)
     # Load laptop profile (both personal and work laptops)

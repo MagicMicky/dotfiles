@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
-# WSL-specific aliases
+# WSL profile - Overrides and additions
+# Only WSL-SPECIFIC aliases and settings go here
+# Common aliases are in core/30-aliases.zsh
 
 # Windows integration
 alias winhome='cd /mnt/c/Users/$USER'
@@ -16,13 +18,15 @@ alias open='explorer.exe .'
 alias wsl='wsl.exe'
 alias clip='clip.exe'  # Copy to Windows clipboard
 
-# Network
+# Network (Windows tools)
 alias ipconfig='ipconfig.exe'
 alias netstat='netstat.exe'
 
-# Useful WSL shortcuts
+# WSL management
 alias wslu='wsl -u root'
 alias wslr='wsl.exe --shutdown'  # Restart WSL
 
-# Update both WSL and system
+# System update (Debian/Ubuntu specific)
 alias update='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y'
+
+# NOTE: Git, Docker, common navigation already in core/30-aliases.zsh

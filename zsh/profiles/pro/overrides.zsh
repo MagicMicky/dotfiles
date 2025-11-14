@@ -1,6 +1,8 @@
 #!/usr/bin/env zsh
-# Pro/work-specific aliases (non-sensitive)
-# Sensitive configs should remain in mac-playbook-work
+# Pro/work profile - Overrides and additions
+# Only WORK-SPECIFIC aliases and settings go here
+# Common aliases are in core/30-aliases.zsh
+# SENSITIVE work configs remain in mac-playbook-work repository
 
 # Kubernetes shortcuts
 alias k='kubectl'
@@ -41,9 +43,11 @@ alias hu='helm upgrade'
 alias hls='helm list'
 alias hs='helm search'
 
-# Docker shortcuts for dev
+# Docker cleanup (dev environments)
 alias dkill='docker kill $(docker ps -q)'
 alias dclean='docker system prune -af'
 
 # Navigation
 alias work='cd ~/Development/work'
+
+# NOTE: Git, Docker, common navigation already in core/30-aliases.zsh
