@@ -86,8 +86,11 @@ fi
 
 # Initialize Starship prompt
 if command -v starship &> /dev/null; then
-  # Use starship config from dotfiles
-  if [[ -f "${DOTFILES_DIR}/starship/starship.toml" ]]; then
+  # Use generated starship config (Ansible creates ~/.config/starship.toml with machine-specific colors)
+  # If not found, fall back to dotfiles version
+  if [[ -f ~/.config/starship.toml ]]; then
+    export STARSHIP_CONFIG=~/.config/starship.toml
+  elif [[ -f "${DOTFILES_DIR}/starship/starship.toml" ]]; then
     export STARSHIP_CONFIG="${DOTFILES_DIR}/starship/starship.toml"
   fi
   eval "$(starship init zsh)"
