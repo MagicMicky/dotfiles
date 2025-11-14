@@ -51,7 +51,11 @@ fi
 # Ctrl-R: fuzzy history search, Ctrl-T: fuzzy file finder, Alt-C: fuzzy cd
 if command -v fzf &> /dev/null; then
   # Try common fzf keybinding locations
-  if [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
+  if [[ -f ~/.fzf/shell/key-bindings.zsh ]]; then
+    # fzf installed from git in ~/.fzf
+    source ~/.fzf/shell/key-bindings.zsh
+    source ~/.fzf/shell/completion.zsh
+  elif [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
     source /usr/share/doc/fzf/examples/key-bindings.zsh
   elif [[ -f /usr/share/fzf/key-bindings.zsh ]]; then
     source /usr/share/fzf/key-bindings.zsh
