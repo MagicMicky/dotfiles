@@ -7,6 +7,9 @@
 # Ghost text from history - least likely to interfere with completion
 zinit light zsh-users/zsh-autosuggestions
 
-# Stage 3 TODO: Add more plugins incrementally:
-# - zsh-syntax-highlighting (command validation)
-# - zsh-history-substring-search (better Ctrl-R)
+# Stage 3 Increment 2: zsh-syntax-highlighting
+# Command validation - must load LAST (after all other plugins)
+zinit light zsh-users/zsh-syntax-highlighting
+
+# Stage 3 TODO: Add more plugins if needed:
+# - zsh-history-substring-search (better Ctrl-R) - optional
