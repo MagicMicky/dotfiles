@@ -31,4 +31,4 @@ zinit light zsh-users/zsh-autosuggestions
 
 # Real-time syntax highlighting and command validation
 # NOTE: MUST load LAST - do not add plugins after this line
-zinit light zdharma-continuum/zsh-fast-syntax-highlighting
+zinit light zdharma-continuum/fast-syntax-highlighting
