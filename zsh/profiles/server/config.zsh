@@ -2,6 +2,11 @@
 # Server-specific configuration
 # Optimized for minimal resource usage
 
+# Load Catppuccin theme (LS_COLORS, BAT_THEME, FZF colors, etc.)
+if [[ -f "$HOME/.config/shell/theme.zsh" ]]; then
+  source "$HOME/.config/shell/theme.zsh"
+fi
+
 # Reduced history size for servers
 export HISTSIZE=10000
 export SAVEHIST=10000

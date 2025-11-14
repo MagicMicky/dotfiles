@@ -2,6 +2,11 @@
 # WSL-specific configuration
 # NOTE: No cross-profile sourcing - each profile is independent
 
+# Load Catppuccin theme (LS_COLORS, BAT_THEME, FZF colors, etc.)
+if [[ -f "$HOME/.config/shell/theme.zsh" ]]; then
+  source "$HOME/.config/shell/theme.zsh"
+fi
+
 # Windows interop
 export BROWSER="wslview"
 

@@ -1,6 +1,11 @@
 #!/usr/bin/env zsh
 # Pro/Work-specific configuration (non-sensitive)
 
+# Load Catppuccin theme (LS_COLORS, BAT_THEME, FZF colors, etc.)
+if [[ -f "$HOME/.config/shell/theme.zsh" ]]; then
+  source "$HOME/.config/shell/theme.zsh"
+fi
+
 # Kubernetes completion
 if command -v kubectl &> /dev/null; then
   source <(kubectl completion zsh)

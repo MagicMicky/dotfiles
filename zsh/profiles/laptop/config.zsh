@@ -1,6 +1,11 @@
 #!/usr/bin/env zsh
 # Laptop-specific configuration
 
+# Load Catppuccin theme (LS_COLORS, BAT_THEME, FZF colors, etc.)
+if [[ -f "$HOME/.config/shell/theme.zsh" ]]; then
+  source "$HOME/.config/shell/theme.zsh"
+fi
+
 # Plugin configurations - DISABLED (plugins removed)
 # zsh-autosuggestions configuration
 # ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
@@ -19,16 +24,12 @@
 # bindkey -M vicmd 'j' history-substring-search-down
 
 # Modern tools configuration
-# bat
+# bat - theme set by theme.zsh, just set style preferences
 if command -v bat &> /dev/null; then
-  export BAT_THEME="TwoDark"
   export BAT_STYLE="numbers,changes,header"
 fi
 
-# eza
-if command -v eza &> /dev/null; then
-  export EZA_COLORS="da=36"
-fi
+# eza - colors set by theme.zsh (respects LS_COLORS)
 
 # zoxide
 if command -v zoxide &> /dev/null; then
