@@ -14,20 +14,10 @@ fi
 # Source zinit
 source "${ZINIT_HOME}/zinit.zsh"
 
-# Load completions - but cache the dump file
-# Only regenerate once per day or when dump is missing/stale
-autoload -Uz compinit
+# NOTE: compinit is NOT called here
+# It's initialized in .zshrc AFTER Starship to prevent display issues
+# See: https://github.com/starship/starship/issues/3402
 
-# Check if dump file needs regeneration (older than 24 hours)
-setopt EXTENDEDGLOB
-if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
-  # Dump is old or missing, regenerate with security check
-  compinit
-else
-  # Use cached dump, skip security check for speed
-  compinit -C
-fi
-
-# Enable completion cache for faster lookups
+# Enable completion cache for faster lookups (when compinit is called later)
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ${ZDOTDIR:-$HOME}/.zsh/cache

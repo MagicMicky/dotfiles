@@ -97,10 +97,11 @@ if command -v starship &> /dev/null; then
 fi
 
 # Initialize completion system AFTER Starship
-# This ensures prompt length calculations are correct
+# This ensures prompt length calculations are correct (prevents character doubling in tab completion)
 autoload -Uz compinit
 # Only regenerate compdump once a day for performance
-if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
+setopt EXTENDEDGLOB
+if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
   compinit
 else
   compinit -C
