@@ -4,10 +4,6 @@
 # Set zinit home directory
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
-# Disable git credential prompts for plugin cloning (Docker/CI environments)
-# Will be unset after plugins load to not affect user's git operations
-export GIT_TERMINAL_PROMPT=0
-
 # Auto-install zinit if not present
 if [[ ! -d "$ZINIT_HOME" ]]; then
    echo "Installing zinit..."
