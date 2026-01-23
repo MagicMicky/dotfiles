@@ -24,11 +24,14 @@ zstyle ':completion:*' cache-path ${ZDOTDIR:-$HOME}/.zsh/cache
 
 # ============================================================================
 # Universal plugins - Loaded on ALL machine types (workstation/homelab/server)
+# Turbo mode: plugins load after prompt appears for faster startup
 # ============================================================================
 
 # Ghost text suggestions from command history
+zinit ice wait'0' lucid
 zinit light zsh-users/zsh-autosuggestions
 
 # Real-time syntax highlighting and command validation
 # NOTE: MUST load LAST - do not add plugins after this line
+zinit ice wait'0' lucid
 zinit light zdharma-continuum/fast-syntax-highlighting

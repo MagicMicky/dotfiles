@@ -17,7 +17,7 @@ fi
 # WSL2-specific: Use Windows SSH agent if available
 if [[ -n "$WSL_DISTRO_NAME" ]]; then
   # Windows SSH agent integration (if using wsl-ssh-agent or similar)
-  if command -v npiperelay.exe &> /dev/null; then
+  if (( $+commands[npiperelay.exe] )); then
     export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
   fi
 fi

@@ -23,10 +23,16 @@ if [[ -d "$HOME/.local/bin" ]]; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
 
-# Golang paths (if go is installed)
-if command -v go &> /dev/null; then
-  export GOPATH=$HOME/Development/golang
-  export GOROOT=$(go env GOROOT)
-  export PATH=$PATH:$GOPATH/bin
-  export PATH=$PATH:$GOROOT/bin
+# Golang paths (lazy-loaded for faster shell startup)
+# Only initializes when you actually use go commands
+# NOTE: Using directory check instead of $+commands[go] - the latter is slow (~80ms)
+# because zsh scans PATH to build command hash on first access
+if [[ -d "/usr/local/go" ]]; then
+  __load_go() {
+    unset -f go 2>/dev/null
+    export GOPATH=$HOME/Development/golang
+    export GOROOT="${GOROOT:-/usr/local/go}"
+    export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
+  }
+  go() { __load_go && go "$@"; }
 fi

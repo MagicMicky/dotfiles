@@ -34,22 +34,26 @@ if [[ -f ~/.zsh.d/work.zsh ]]; then
   source ~/.zsh.d/work.zsh
 fi
 
-# Initialize vanilla zsh completion (NO customization in vanilla baseline)
+# Initialize vanilla zsh completion with caching (rebuild once per day)
 autoload -Uz compinit
-compinit
+if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
 
 # Stage 2: Starship prompt initialization (minimal)
 # Using starship-vanilla.toml (character only, no modules)
 # FIX: Tab completion duplication bug requires UTF-8 locale (see core/20-env.zsh)
 # GitHub issue: https://github.com/starship/starship/issues/2176
-if command -v starship &> /dev/null; then
+if (( $+commands[starship] )); then
   export STARSHIP_CONFIG=~/.config/starship.toml
   eval "$(starship init zsh)"
 fi
 
 # Stage 4: fzf key bindings
 # Ctrl-R: fuzzy history search, Ctrl-T: fuzzy file finder, Alt-C: fuzzy cd
-if command -v fzf &> /dev/null; then
+if (( $+commands[fzf] )); then
   # Try common fzf keybinding locations
   if [[ -f ~/.fzf/shell/key-bindings.zsh ]]; then
     # fzf installed from git in ~/.fzf
@@ -64,13 +68,17 @@ if command -v fzf &> /dev/null; then
   fi
 fi
 
-# Stage 4: zoxide (smart directory jumping)
-if command -v zoxide &> /dev/null; then
-  eval "$(zoxide init zsh)"
-fi
+# NOTE: zoxide is initialized in 25-tools.zsh (removed duplicate here)
 
 # Print welcome message (helps identify which config is loaded)
 if [[ -o interactive ]]; then
   MACHINE_TYPE=$(cat ~/.zsh.d/.machine-type 2>/dev/null || echo "unknown")
   echo "🔧 Vanilla baseline loaded | Profile: $MACHINE_TYPE | Stage: Complete (full baseline)"
 fi
+
+# bun completions
+[ -s "/home/magicmicky/.bun/_bun" ] && source "/home/magicmicky/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

@@ -1,6 +1,9 @@
 #!/usr/bin/env zsh
 # Environment variables - Stage 1: Basic completion options
 
+# Machine type detection (used by 25-tools.zsh for workstation-specific config)
+export MACHINE_TYPE=$(cat ~/.zsh.d/.machine-type 2>/dev/null || echo "unknown")
+
 # Editor
 export EDITOR='vim'
 export VISUAL='vim'

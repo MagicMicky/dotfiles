@@ -29,14 +29,14 @@ function extract() {
 }
 
 # Legacy find function (fallback if fd not installed)
-if ! command -v fd &> /dev/null; then
+if (( ! $+commands[fd] )); then
   function f() {
     find . -iname "*$1*" ${@:2}
   }
 fi
 
 # Legacy grep function (fallback if ripgrep not installed)
-if ! command -v rg &> /dev/null; then
+if (( ! $+commands[rg] )); then
   function r() {
     grep "$1" ${@:2} -R .
   }

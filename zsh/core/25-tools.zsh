@@ -31,15 +31,15 @@ esac
 # ----------------------------------------------------------------------------
 # fzf - Enhanced fuzzy finder (workstations only)
 # ----------------------------------------------------------------------------
-if [[ "$IS_WORKSTATION" == "true" ]] && command -v fzf &> /dev/null; then
+if [[ "$IS_WORKSTATION" == "true" ]] && (( $+commands[fzf] )); then
   # Use fd for file finding (faster, respects .gitignore)
-  if command -v fd &> /dev/null; then
+  if (( $+commands[fd] )); then
     export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   fi
 
   # Ctrl+T: File finder with bat preview
-  if command -v bat &> /dev/null; then
+  if (( $+commands[bat] )); then
     export FZF_CTRL_T_OPTS="
       --preview 'bat -n --color=always {}'
       --bind 'ctrl-/:change-preview-window(down|hidden|)'
@@ -47,7 +47,7 @@ if [[ "$IS_WORKSTATION" == "true" ]] && command -v fzf &> /dev/null; then
   fi
 
   # Alt+C: Directory navigator with eza tree preview
-  if command -v eza &> /dev/null; then
+  if (( $+commands[eza] )); then
     export FZF_ALT_C_OPTS="
       --preview 'eza --tree --color=always {} | head -200'
     "
@@ -57,14 +57,16 @@ fi
 # ----------------------------------------------------------------------------
 # bat - Better cat (all profiles if installed)
 # ----------------------------------------------------------------------------
-if command -v bat &> /dev/null; then
+if (( $+commands[bat] )); then
   export BAT_STYLE="numbers,changes,header"
 fi
 
 # ----------------------------------------------------------------------------
 # zoxide - Smart directory jumping (workstations only)
+# NOTE: Kept eager-load since zoxide init is only ~3ms and lazy-loading
+# conflicts with zinit's `zi` alias
 # ----------------------------------------------------------------------------
-if [[ "$IS_WORKSTATION" == "true" ]] && command -v zoxide &> /dev/null; then
+if [[ "$IS_WORKSTATION" == "true" ]] && (( $+commands[zoxide] )); then
   export _ZO_DATA_DIR="$HOME/.local/share/zoxide"
   export _ZO_ECHO=1
   eval "$(zoxide init zsh)"

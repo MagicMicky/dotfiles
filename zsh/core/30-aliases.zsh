@@ -87,7 +87,7 @@ alias mv='mv -i'
 # Modern tool replacements (universal - if installed)
 # =============================================================================
 
-if command -v eza &> /dev/null; then
+if (( $+commands[eza] )); then
   alias ls='eza'
   alias ll='eza -l'
   alias la='eza -la'
@@ -99,16 +99,16 @@ else
   alias la='ls -lAh --color=auto'
 fi
 
-if command -v bat &> /dev/null; then
+if (( $+commands[bat] )); then
   alias cat='bat'
   alias bathelp='bat --help'
 fi
 
-if command -v fd &> /dev/null; then
+if (( $+commands[fd] )); then
   alias find='fd'
 fi
 
-if command -v rg &> /dev/null; then
+if (( $+commands[rg] )); then
   alias grep='rg'
 else
   # Fallback: enable colors for standard grep
