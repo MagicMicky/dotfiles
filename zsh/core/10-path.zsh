@@ -26,16 +26,10 @@ fi
 # NOTE: User-installed tools (fzf, zoxide, etc.) are symlinked to ~/.local/bin
 # by Ansible, so no tool-specific PATH entries needed here
 
-# Golang paths (lazy-loaded for faster shell startup)
-# Only initializes when you actually use go commands
 # NOTE: Using directory check instead of $+commands[go] - the latter is slow (~80ms)
 # because zsh scans PATH to build command hash on first access
 if [[ -d "/usr/local/go" ]]; then
-  __load_go() {
-    unset -f go 2>/dev/null
-    export GOPATH=$HOME/Development/golang
-    export GOROOT="${GOROOT:-/usr/local/go}"
-    export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
-  }
-  go() { __load_go && go "$@"; }
+  export GOPATH=$HOME/Development/golang
+  export GOROOT="${GOROOT:-/usr/local/go}"
+  export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
 fi
