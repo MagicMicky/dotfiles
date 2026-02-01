@@ -1,8 +1,4 @@
 {
-  "statusLine": {
-    "type": "command",
-    "command": "~/.claude/statusline.sh"
-  },
   "permissions": {
     "allow": [
       "Read",
@@ -63,6 +59,21 @@
       "Bash(docker:*)",
       "Bash(gh:*)"
     ],
+    "deny": [
+      "Read(.env*)",
+      "Bash(rm -rf:*)",
+      "Bash(sudo:*)",
+      "Bash(dd *)",
+      "Bash(*| dd *)",
+      "Bash(*&& dd *)",
+      "Bash(mkfs*)",
+      "Bash(*| mkfs*)",
+      "Bash(*&& mkfs*)",
+      "Bash(chmod 777*)",
+      "Bash(*> /dev/*)",
+      "Bash(*| sudo *)",
+      "Bash(*&& sudo *)"
+    ],
     "ask": [
       "Bash(gh repo delete*)",
       "Bash(gh repo create*)",
@@ -98,24 +109,16 @@
       "Bash(git clean*)",
       "Bash(git checkout .)",
       "Bash(git restore *)",
+      "Bash(git push * --delete *)",
+      "Bash(git push origin --delete *)",
+      "Bash(git branch -D *)",
       "Bash(kubectl delete*)",
       "Bash(*DROP TABLE*)",
       "Bash(*DROP DATABASE*)"
-    ],
-    "deny": [
-      "Read(.env*)",
-      "Bash(rm -rf:*)",
-      "Bash(sudo:*)",
-      "Bash(dd *)",
-      "Bash(*| dd *)",
-      "Bash(*&& dd *)",
-      "Bash(mkfs*)",
-      "Bash(*| mkfs*)",
-      "Bash(*&& mkfs*)",
-      "Bash(chmod 777*)",
-      "Bash(*> /dev/*)",
-      "Bash(*| sudo *)",
-      "Bash(*&& sudo *)"
     ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline.sh"
   }
 }
