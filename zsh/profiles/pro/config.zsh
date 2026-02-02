@@ -5,29 +5,39 @@
 # ============================================================================
 # Professional/Work tool completions
 # ============================================================================
+# NOTE: These run early in .zshrc load, before compinit
+# Completions that need compinit should use hooks or lazy loading
 
-# Enable bash-style completions (compinit already called in .zshrc)
-autoload -U +X bashcompinit && bashcompinit
+# Defer completions until after compinit runs (via precmd hook)
+_setup_pro_completions() {
+  # Remove this hook after first run
+  precmd_functions=(${precmd_functions:#_setup_pro_completions})
 
-# Kubernetes completion
-if command -v kubectl &> /dev/null; then
-  source <(kubectl completion zsh)
-  # Faster kubectl alias
-  alias k='kubectl'
-  complete -F __start_kubectl k
-fi
+  # Enable bash-style completions
+  autoload -U +X bashcompinit && bashcompinit
 
-# AWS CLI completion
-if command -v aws_completer &> /dev/null; then
-  complete -C aws_completer aws
-fi
+  # Kubernetes completion
+  if command -v kubectl &> /dev/null; then
+    source <(kubectl completion zsh)
+    alias k='kubectl'
+    complete -F __start_kubectl k
+  fi
 
-# Terraform completion
-if command -v terraform &> /dev/null; then
-  complete -o nospace -C /usr/bin/terraform terraform
-fi
+  # AWS CLI completion
+  if command -v aws_completer &> /dev/null; then
+    complete -C aws_completer aws
+  fi
 
-# Helm completion
-if command -v helm &> /dev/null; then
-  source <(helm completion zsh)
-fi
+  # Terraform completion
+  if command -v terraform &> /dev/null; then
+    complete -o nospace -C /usr/bin/terraform terraform
+  fi
+
+  # Helm completion
+  if command -v helm &> /dev/null; then
+    source <(helm completion zsh)
+  fi
+}
+
+# Register hook to run after first prompt (when compinit is ready)
+precmd_functions+=(_setup_pro_completions)
