@@ -6,8 +6,7 @@
 # Professional/Work tool completions
 # ============================================================================
 
-# Initialize completion system for bash-style completions
-autoload -Uz compinit && compinit
+# Enable bash-style completions (compinit already called in .zshrc)
 autoload -U +X bashcompinit && bashcompinit
 
 # Kubernetes completion
