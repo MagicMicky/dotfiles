@@ -6,6 +6,10 @@
 # Professional/Work tool completions
 # ============================================================================
 
+# Initialize completion system for bash-style completions
+autoload -Uz compinit && compinit
+autoload -U +X bashcompinit && bashcompinit
+
 # Kubernetes completion
 if command -v kubectl &> /dev/null; then
   source <(kubectl completion zsh)
