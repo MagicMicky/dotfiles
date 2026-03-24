@@ -8,10 +8,15 @@ export MACHINE_TYPE=$(cat ~/.zsh.d/.machine-type 2>/dev/null || echo "unknown")
 export EDITOR='vim'
 export VISUAL='vim'
 
-# Locale - hardcoded to en_US.UTF-8 (always available on macOS)
-# Fixes Starship tab completion duplication bug (GitHub issue #2176)
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
+# Locale - UTF-8 required for Starship tab completion (GitHub issue #2176)
+# Fast check: uname for macOS, file stat for glibc Linux, C.UTF-8 fallback for minimal/musl
+if [[ "$(uname)" == "Darwin" ]] || [[ -d /usr/lib/locale/en_US.utf8 ]] || [[ -d /usr/lib/locale/en_US.UTF-8 ]]; then
+  export LANG=en_US.UTF-8
+  export LC_ALL=en_US.UTF-8
+else
+  export LANG=C.UTF-8
+  export LC_ALL=C.UTF-8
+fi
 
 # History configuration
 export HISTSIZE=50000
