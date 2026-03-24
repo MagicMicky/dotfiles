@@ -79,15 +79,23 @@ fi
 export NVM_DIR="$HOME/.nvm"
 
 if [[ -d "$NVM_DIR" ]]; then
-  # Lazy-load nvm: define placeholder functions that load nvm on first use
-  __load_nvm() {
-    unset -f nvm node npm npx 2>/dev/null
+  # Eager: add default node to PATH so node/npm/npx work without loading nvm
+  # This reads the alias file and finds the matching version directory (no subshell)
+  local nvm_default_alias nvm_default_path
+  if [[ -f "$NVM_DIR/alias/default" ]]; then
+    nvm_default_alias=$(<"$NVM_DIR/alias/default")
+    # Find matching version directory (glob handles "20" matching "v20.x.x")
+    nvm_default_path=($NVM_DIR/versions/node/v${nvm_default_alias}*(N[1]))
+    if [[ -n "$nvm_default_path" && -d "$nvm_default_path/bin" ]]; then
+      path=("$nvm_default_path/bin" $path)
+    fi
+  fi
+
+  # Lazy-load nvm itself: only sources nvm.sh when you run `nvm`
+  nvm() {
+    unset -f nvm 2>/dev/null
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    nvm "$@"
   }
-
-  nvm() { __load_nvm && nvm "$@"; }
-  node() { __load_nvm && node "$@"; }
-  npm() { __load_nvm && npm "$@"; }
-  npx() { __load_nvm && npx "$@"; }
 fi
