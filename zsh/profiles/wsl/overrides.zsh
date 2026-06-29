@@ -18,6 +18,10 @@ alias open='explorer.exe .'
 alias wsl='wsl.exe'
 alias clip='clip.exe'  # Copy to Windows clipboard
 
+# macOS-compatible clipboard helpers
+pbcopy() { clip.exe; }
+pbpaste() { powershell.exe -NoProfile -Command Get-Clipboard | sed 's/\r$//'; }
+
 # Network (Windows tools)
 alias ipconfig='ipconfig.exe'
 alias netstat='netstat.exe'
