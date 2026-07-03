@@ -19,6 +19,7 @@
     cmd+0            reset font size
 
   MISC
+    cmd+click        open link
     cmd+ctrl+,       reload config
     cmd+/            show this cheatsheet
 
