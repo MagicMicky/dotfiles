@@ -1,0 +1,26 @@
+
+  kitty shortcuts
+  ─────────────────────────────────────────────
+
+  PANES (splits)
+    cmd+d            split right
+    cmd+shift+d      split down
+    cmd+alt+h/j/k/l  move to pane  (left/down/up/right)
+    cmd+ctrl+h/j/k/l resize pane
+    cmd+ctrl+0       reset pane sizes
+
+  TABS / WINDOWS
+    cmd+t            new tab (home dir)
+    cmd+1..9         jump to pane N
+    ctrl+cmd+f       native fullscreen
+
+  FONT
+    cmd+= / cmd+-    bigger / smaller
+    cmd+0            reset font size
+
+  MISC
+    cmd+ctrl+,       reload config
+    cmd+/            show this cheatsheet
+
+  ─────────────────────────────────────────────
+  (press q to close)
