@@ -85,7 +85,12 @@
       "Bash(gh variable*)",
       "Bash(gh release create*)",
       "Bash(gh release delete*)",
-      "Bash(gh auth*)",
+      "Bash(gh auth login*)",
+      "Bash(gh auth logout*)",
+      "Bash(gh auth refresh*)",
+      "Bash(gh auth token*)",
+      "Bash(gh auth switch*)",
+      "Bash(gh auth setup-git*)",
       "Bash(gh ssh-key*)",
       "Bash(gh gpg-key*)",
       "Bash(gh extension install*)",
@@ -123,5 +128,6 @@
     "type": "command",
     "command": "~/.claude/statusline.sh"
   },
-  "effortLevel": "high"
+  "effortLevel": "high",
+  "tui": "fullscreen"
 }
